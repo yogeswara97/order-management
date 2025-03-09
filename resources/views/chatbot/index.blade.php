@@ -219,3 +219,14 @@
         </script>
     @endpush
 </x-layout>
+
+
+{{-- function clearMessages() {
+    const chatMessages = document.getElementById('chat-messages');
+    if (chatMessages) {
+        chatMessages.innerHTML = '';
+    } else {
+        console.error('Element with id "chat-messages" not found.');
+    }
+    document.getElementById('empty_chat').classList.remove('hidden');
+} --}}
