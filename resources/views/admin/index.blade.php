@@ -1,0 +1,92 @@
+<x-layout>
+    <x-slot:title>{{ $title }}</x-slot:title>
+
+    <x-alret />
+
+    {{-- HEADER --}}
+    <x-header title="Admin" :breadcrumbs="[
+        ['label' => 'Home', 'url' => route('index')],
+        ['label' => 'Admin', 'url' => route('admin.index')],
+    ]" />
+
+    {{-- TABLE --}}
+    <div class="overflow-x-auto rounded-2xl border border-gray-200">
+        <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+            <div class="w-full md:w-1/4">
+                <form class="flex items-center" method="GET" action="{{ route('admin.index') }}">
+                    <label for="simple-search" class="sr-only">Search</label>
+                    <div class="relative w-full">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-900">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <input type="text" id="simple-search" name="search"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full pl-10 p-2"
+                            placeholder="Search by name" value="{{ request('search') }}" required="">
+                    </div>
+                </form>
+            </div>
+            @if (session('user')['role'] == 'super.admin')
+            <div
+                class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                <a href="{{ route('admin.index') }}" class="button-delete">
+                    Reset Filter
+                </a>
+                <a href="{{ route('admin.create') }}" class="button-add">
+                    Create Admin
+                </a>
+            </div>
+            @endif
+        </div>
+
+
+        @php
+        $headers = ['Name', 'Email', 'role',];
+
+        if (session('user')['role'] == 'super.admin') {
+            $headers[] = 'Action';
+        }
+        @endphp
+
+        <x-table :headers="$headers">
+            @foreach ($admins as $admin)
+                <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        {{ $admin->name }}
+                    </th>
+                    <td class="px-6 py-4">
+                        {{ $admin->email }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ $admin->role == 'super.admin' ? 'Super Admin' : 'Admin' }}
+                    </td>
+
+                    @if (session('user')['role'] == 'super.admin')
+                    <td class="px-6 py-4">
+                        <div class="space-x-2 flex">
+
+                            <a href="{{ route('admin.edit', $admin->id) }}"
+                                class="button-mini-edit">
+                                <i class="fas fa-pencil"></i>
+                            </a>
+
+
+                            <form action="{{ route('admin.destroy', $admin->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    onclick="return confirm('Are you sure you want to delete this admin? {{ $admin->name }}')"
+                                    class="button-mini-delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+
+                        </div>
+                    </td>
+                    @endif
+                </tr>
+                @endforeach
+        </x-table>
+
+        <x-table-navigation :dataset="$admins" :perPage="$perPage"/>
+    </div>
+</x-layout>
