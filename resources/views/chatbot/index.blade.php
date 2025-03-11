@@ -1,9 +1,9 @@
 <x-layout>
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    <div class="flex gap-4 relative">
+    <div class="flex flex-col xl:flex-row gap-4 relative">
         {{-- DOCUMENTATION --}}
-        <div class="wrapper min-h-[calc(100vh-178px)] w-1/2 text-black">
+        <div class="flex-1 wrapper min-h-[calc(100vh-178px)] text-black">
             <h2 class="text-2xl font-bold mb-4">Dokumentasi Singkat Penggunaan Chatbot</h2>
             <p class="text-gray-700 mb-4">Chatbot adalah program komputer yang dirancang untuk mensimulasikan percakapan
                 dengan pengguna. Chatbot dapat digunakan dalam berbagai konteks, seperti
@@ -34,7 +34,7 @@
         </div>
 
         {{-- CHATBOT --}}
-        <div class="w-1/2 ">
+        <div class="flex-1">
 
             <!-- component -->
             <div class="bg-gray-100 h-[calc(100vh-120px)] flex flex-col shadow-md rounded-lg sticky top-20">
@@ -158,10 +158,11 @@
                 showLoading();
 
                 try {
-                    const response = await fetch('http://127.0.0.1:5000/query', {
+                    const response = await fetch('{{ env('CHATBOT_URL') }}', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'X-Secret-Key':'{{ env('CHATBOT_SECRET_KEY') }}'
                         },
                         body: JSON.stringify({
                             query: userMessage
@@ -221,6 +222,3 @@
 </x-layout>
 
 
-{{-- function clearMessages() {
-    const chatMessages = document.getElementById('chat-messages');
-    if (chatMessages) { }}

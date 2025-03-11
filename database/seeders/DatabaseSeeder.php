@@ -33,9 +33,9 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin'
         ]);
 
-        // Customer::factory()->count(20)->create();
+        Customer::factory()->count(20)->create();
 
-        // Order::factory()->count(3)->create();
-        // OrderItem::factory()->count(20)->withOrderId(1)->create();
+        // Order::factory()->count(100)->create();
+        // OrderItem::factory()->count(200)->withOrderId(1)->create();
     }
 }

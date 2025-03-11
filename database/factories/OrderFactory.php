@@ -18,7 +18,7 @@ class OrderFactory extends Factory
     {
         return [
             'customer_id' => 1,
-            'order_date' => $this->faker->dateTimeBetween('2025-02-01', '2025-03-31')->format('Y-m-d'),
+            'order_date' => $this->faker->dateTimeBetween('2024-02-01', '2025-03-31')->format('Y-m-d'),
             'reference_number' => $this->faker->unique()->randomNumber(8),
             'order_number' => $this->faker->unique()->randomNumber(6),
             'object' => $this->faker->word(),

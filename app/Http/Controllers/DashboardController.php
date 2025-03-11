@@ -14,6 +14,11 @@ class DashboardController extends Controller
     {
         $year = $request->input('year', date('Y'));
         $monthlyRevenue = $this->getMonthlyRevenue($year);
+        // dd($monthlyRevenue);
+        $monthlyRevenueCurrency = $this->getMonthlyRevenueCurrency($year);
+
+        // dd($monthlyRevenueCurrency['idr']);
+
         $newOrderCount = $this->getNewOrderCount();
         $customerPercentage = $this->calculateCustomerPercentages();
 
@@ -40,6 +45,7 @@ class DashboardController extends Controller
             'percentageYear',
             'percentageMonth',
             'monthlyRevenue',
+            'monthlyRevenueCurrency',
             'year',
             'orders',
             'customerPercentage'
@@ -59,6 +65,35 @@ class DashboardController extends Controller
                 'y' => $revenue,
             ];
         }
+        return $monthlyRevenue;
+    }
+
+
+
+    private function getMonthlyRevenueCurrency($year, $currencies = ['usd', 'eur', 'idr'])
+    {
+
+        $monthlyRevenue = [];
+        foreach ($currencies as $currency) {
+            $monthlyRevenue[$currency] = array_fill(0, 12, []); // Create an array with 12 empty arrays
+        }
+
+        for ($i = 1; $i <= 12; $i++) {
+            foreach ($currencies as $currency) {
+                $revenue = Order::whereMonth('order_date', $i)
+                    ->whereYear('order_date', $year)
+                    ->where('currency', $currency)
+                    ->sum(DB::raw('grand_total'));
+
+                // Populate the monthly revenue array
+
+                $monthlyRevenue[$currency][$i - 1] = [
+                    'x' => Carbon::create($year, $i)->format('M'),
+                    'y' => $revenue,
+                ];
+            }
+        }
+        // dd($monthlyRevenue);
         return $monthlyRevenue;
     }
 
@@ -100,7 +135,8 @@ class DashboardController extends Controller
         return $revenue;
     }
 
-    private function gatPercentageMonth(){
+    private function gatPercentageMonth()
+    {
         $revenueCurrentMonth = $this->getRevenueCurrentMonth();
         $revenueLastMonth = $this->getRevenueLastMonth();
 
@@ -130,13 +166,14 @@ class DashboardController extends Controller
     }
     private function getRevenueLastYear()
     {
-        $revenue = Order::whereYear('order_date', date('Y') -1 )
+        $revenue = Order::whereYear('order_date', date('Y') - 1)
             ->sum(DB::raw('grand_total * exchange_rate'));
 
         return $revenue;
     }
 
-    private function gatPercentageYear(){
+    private function gatPercentageYear()
+    {
         $revenueCurrentYear = $this->getRevenueCurrentYear() ?? 1;
         $revenueLastYear = $this->getRevenueLastYear();
 

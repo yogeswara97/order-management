@@ -1,6 +1,6 @@
-<nav class="bg-gray-50 border border-gray-200 fixed top-0 w-full h-16 z-20">
-    <div class="max-w-screen-xl flex flex-wrap sm:ml-64 items-center justify-end mx-auto px-10 py-4">
-        <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative text-black">
+<nav class="bg-gray-50 border border-gray-200 fixed top-0 w-full h-16 z-20 ">
+    <div class="max-w-full flex flex-wrap sm:ml-64 items-center justify-end mx-auto px-10 py-4">
+        <div class="flex items-center justify-end md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative text-black">
             <button type="button"
                 class="flex items-center text-sm rounded-full md:me-0 "
                 id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
@@ -28,8 +28,7 @@
                     id="user-dropdown">
                     <ul class="py-2" aria-labelledby="user-menu-button">
                         <li>
-                            <button type="submit" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200">Sign
-                                out</button>
+                            <button type="submit" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200">Sign out</button>
                         </li>
                     </ul>
                 </div>

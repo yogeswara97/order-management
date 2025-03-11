@@ -202,9 +202,8 @@
         <h2 class="text-gray-900 font-semibold text-xl py-4">Terms and Conditions</h2>
         <hr class="mb-4">
         <div class="mb-6">
-            <textarea id="terms_conditions" name="terms_conditions" rows="4" class="input h-60"
-                    placeholder="Write product description here">{!! $order->terms_conditions !!}
-            </textarea>
+            <textarea id="terms_conditions" name="terms_conditions" rows="4" class="input h-60 text-gray-900"
+                    placeholder="Write product description here">{!! $order->terms_conditions !!}</textarea>
             {{-- <input type="text" name="terms_conditions" id="terms_conditions" class="text-black"> --}}
             {{-- <x-wysiwyg-flowbite></x-wysiwyg-flowbite> --}}
         </div>

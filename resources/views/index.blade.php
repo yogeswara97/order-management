@@ -117,7 +117,7 @@
         </div>
     </div>
 
-
+    {{-- LATEST ORDER & Member --}}
     <div class=" gap-4 mb-4 flex flex-col xl:flex-row">
         <div class="rounded-2xl border border-gray-200 bg-white p-6 md:p-8 w-full xl:w-2/3 ">
             <div class="flex justify-between pb-4 mb-4 border-b border-gray-200">
@@ -191,7 +191,7 @@
     </div>
 
     {{-- Chart --}}
-    <div class="max-w-full w-full bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6">
+    <div class="max-w-full w-full bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 mb-4">
         <div class="flex justify-between pb-4 mb-4 border-b border-gray-200">
             <div class="flex items-center">
                 <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 me-3">
@@ -199,7 +199,7 @@
                 </div>
                 <div>
                     <h5 class="leading-none text-2xl font-bold text-gray-900 pb-1">Revenue Chart</h5>
-                    <p class="text-sm font-normal text-gray-500">Monthly Revenue for {{ $year }}</p>
+                    <p class="text-sm font-normal text-gray-500">The Grand total sum multiplied by the exchange rate</p>
                 </div>
             </div>
 
@@ -225,115 +225,45 @@
 
     </div>
 
+    {{-- Chart 2 --}}
+    <div class="max-w-full w-full bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6">
+        <div class="flex justify-between pb-4 mb-4 border-b border-gray-200">
+            <div class="flex items-center">
+                <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 me-3">
+                    <i class="fas fa-chart-line text-blue-800"></i>
+                </div>
+                <div>
+                    <h5 class="leading-none text-2xl font-bold text-gray-900 pb-1">Revenue Chart</h5>
+                    <p class="text-sm font-normal text-gray-500">The Grand total sum of each currency.</p>
+                </div>
+            </div>
 
+            {{-- <div class="flex items-center justify-center gap-4">
+                <!-- Previous Button -->
+                <a href="{{ route('index', ['year' => $year - 1]) }}" class="button-mini-show flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+
+                <!-- Year Display -->
+                <span class="text-gray-900 font-bold text-lg">
+                    {{ $year }} <!-- Display the current year -->
+                </span>
+
+                <!-- Next Button -->
+                <a href="{{ route('index', ['year' => $year + 1]) }}" class="button-mini-show flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div> --}}
+        </div>
+
+        <div id="revenue-chart-2" class="text-gray-900"></div>
+
+    </div>
 
     @push('scripts')
         <script src="{{ asset('js/apexcart.js') }}"></script>
-        <script>
-            const options = {
-                colors: ["#1A56DB"],
-                series: [{
-                    name: "Monthly Revenue",
-                    data: @json($monthlyRevenue),
-                }, ],
-                chart: {
-                    type: "bar",
-                    height: "320px",
-                    fontFamily: "Inter, sans-serif",
-                    toolbar: {
-                        show: false,
-                    },
-                },
-                plotOptions: {
-                    bar: {
-                        horizontal: false,
-                        columnWidth: "70%",
-                        borderRadiusApplication: "end",
-                        borderRadius: 8,
-                    },
-                },
-                tooltip: {
-                    shared: true,
-                    intersect: false,
-                    style: {
-                        fontFamily: "Inter, sans-serif",
-                    },
-                },
-                states: {
-                    hover: {
-                        filter: {
-                            type: "darken",
-                            value: 1,
-                        },
-                    },
-                },
-                stroke: {
-                    show: true,
-                    width: 2,
-                    colors: ["#1A56DB"],
-                },
-                grid: {
-                    show: false,
-                    strokeDashArray: 4,
-                    padding: {
-                        left: 2,
-                        right: 2,
-                        top: -14
-                    },
-                },
-                dataLabels: {
-                    enabled: false,
-                },
-                legend: {
-                    show: false,
-                },
-                xaxis: {
-                    floating: false,
-                    labels: {
-                        show: true,
-                        style: {
-                            fontFamily: "Inter, sans-serif",
-                            cssClass: 'text-xs font-normal text-gray-500'
-                            // color: '#4B5563'
-                        }
-                    },
-                    axisBorder: {
-                        show: false,
-                    },
-                    axisTicks: {
-                        show: false,
-                    },
-                },
-                yaxis: {
-                    show: true,
-                    labels: {
-                        show: true,
-                        formatter: function(value) {
-                            return new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR',
-                                minimumFractionDigits: 0,
-                                maximumFractionDigits: 0
-                            }).format(value);
-                        },
-                        style: {
-                            fontFamily: "Inter, sans-serif",
-                            cssClass: 'text-xs font-normal text-gray-500'
-                        }
-                    },
-                },
 
-                fill: {
-                    opacity: 1,
-                },
-            }
-
-            if (document.getElementById("revenue-chart") && typeof ApexCharts !== 'undefined') {
-                const chart = new ApexCharts(document.getElementById("revenue-chart"), options);
-                chart.render();
-            }
-        </script>
-
+        {{-- CHART MEMBER --}}
         <script>
             const customerPercentages = @json($customerPercentage);
 
@@ -400,5 +330,230 @@
                 chart.render();
             }
         </script>
+
+        {{-- CHART REVENUE 1 --}}
+        <script>
+            const optionsRevenueChart = {
+                colors: ["#1A56DB"],
+                series: [{
+                    name: "Monthly Revenue",
+                    data: @json($monthlyRevenue),
+                }, ],
+                chart: {
+                    type: "bar",
+                    height: "320px",
+                    fontFamily: "Inter, sans-serif",
+                    toolbar: {
+                        show: false,
+                    },
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: "70%",
+                        borderRadiusApplication: "end",
+                        borderRadius: 8,
+                    },
+                },
+                tooltip: {
+                    shared: true,
+                    intersect: false,
+                    style: {
+                        fontFamily: "Inter, sans-serif",
+                    },
+                },
+                states: {
+                    hover: {
+                        filter: {
+                            type: "darken",
+                            value: 1,
+                        },
+                    },
+                },
+                stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ["#1A56DB"],
+                },
+                grid: {
+                    show: true,
+                    strokeDashArray: 4,
+                    padding: {
+                        left: 2,
+                        right: 2,
+                        top: -14
+                    },
+                },
+                dataLabels: {
+                    enabled: false,
+                },
+                legend: {
+                    show: false,
+                },
+                xaxis: {
+                    floating: false,
+                    labels: {
+                        show: true,
+                        style: {
+                            fontFamily: "Inter, sans-serif",
+                            cssClass: 'text-xs font-normal text-gray-500'
+                            // color: '#4B5563'
+                        }
+                    },
+                    axisBorder: {
+                        show: false,
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                },
+                yaxis: {
+                    show: true,
+                    labels: {
+                        show: true,
+                        formatter: function(value) {
+                            return new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR',
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0
+                            }).format(value);
+                        },
+                        style: {
+                            fontFamily: "Inter, sans-serif",
+                            cssClass: 'text-xs font-normal text-gray-500'
+                        }
+                    },
+                },
+
+                fill: {
+                    opacity: 1,
+                },
+            }
+
+            if (document.getElementById("revenue-chart") && typeof ApexCharts !== 'undefined') {
+                const chart = new ApexCharts(document.getElementById("revenue-chart"), optionsRevenueChart);
+                chart.render();
+            }
+        </script>
+
+        {{-- CHART REVENUE 2 --}}
+        <script>
+            const usdData = @json($monthlyRevenueCurrency['usd']);
+            const eurData = @json($monthlyRevenueCurrency['eur']);
+            const idrData = @json($monthlyRevenueCurrency['idr']);
+
+            const optionsRevenueChartCurrency = {
+                series: [{
+                        name: "Monthly Revenue (USD) <span class='font-bold'>$</span>",
+                        data: usdData,
+                        color: "#1A56DB",
+                    },
+                    {
+                        name: "Monthly Revenue (EUR) <span class='font-bold'>€</span>",
+                        data: eurData,
+                        color: "#7E3AF2",
+                    },
+                    {
+                        name: "Monthly Revenue (IDR) <span class='font-bold'>Rp.</span>",
+                        data: idrData,
+                    }
+                ],
+                chart: {
+                    type: "line",
+                    height: "320px",
+                    fontFamily: "Inter, sans-serif",
+                    toolbar: {
+                        show: false,
+                    },
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: "70%",
+                        borderRadiusApplication: "end",
+                        borderRadius: 8,
+                    },
+                },
+                tooltip: {
+                    shared: true,
+                    intersect: false,
+                    style: {
+                        fontFamily: "Inter, sans-serif",
+                    },
+                },
+                states: {
+                    hover: {
+                        filter: {
+                            type: "darken",
+                            value: 1,
+                        },
+                    },
+                },
+                stroke: {
+                    show: true,
+                    width: 2,
+                },
+                grid: {
+                    show: true,
+                    strokeDashArray: 4,
+                    padding: {
+                        left: 2,
+                        right: 2,
+                        top: -14
+                    },
+                },
+                dataLabels: {
+                    enabled: true,
+                },
+                legend: {
+                    show: false,
+                },
+                xaxis: {
+                    floating: false,
+                    labels: {
+                        show: true,
+                        style: {
+                            fontFamily: "Inter, sans-serif",
+                            cssClass: 'text-xs font-normal text-gray-500'
+                            // color: '#4B5563'
+                        }
+                    },
+                    axisBorder: {
+                        show: false,
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                },
+                yaxis: {
+                    show: true,
+                    labels: {
+                        show: true,
+                        formatter: function(value) {
+                            return new Intl.NumberFormat('id-ID', {
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0
+                            }).format(value);
+                        },
+                        style: {
+                            fontFamily: "Inter, sans-serif",
+                            cssClass: 'text-xs font-normal text-gray-500'
+                        }
+                    },
+                },
+
+                fill: {
+                    opacity: 1,
+                },
+            }
+
+            if (document.getElementById("revenue-chart-2") && typeof ApexCharts !== 'undefined') {
+                const chart = new ApexCharts(document.getElementById("revenue-chart-2"), optionsRevenueChartCurrency);
+                chart.render();
+            }
+        </script>
+
+        <script></script>
     @endpush
 </x-layout>
