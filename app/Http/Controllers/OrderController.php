@@ -19,6 +19,7 @@ class OrderController extends Controller
 
         $startDate = $request->input('start');
         $endDate = $request->input('end');
+        $customerName = $request->input('search');
         $perPage = 50;
 
         $query = Order::with('customer')->orderByDesc('order_date');
@@ -27,10 +28,20 @@ class OrderController extends Controller
             $query->whereBetween('order_date', [$startDate, $endDate]);
         }
 
+        if ($customerName) {
+            $query->whereHas('customer', function($q) use ($customerName) {
+                $q->where('name', 'like', '%' . $customerName . '%');
+            });
+        }
+
         $orders = $query->paginate($perPage);
+
+        $customersName = Customer::select('name')
+            ->orderBy('status', 'desc')
+            ->get();
         $title = "Order";
 
-        return view('orders.index', compact('orders', 'perPage','title'));
+        return view('orders.index', compact('orders', 'perPage','title','customersName'));
     }
 
 

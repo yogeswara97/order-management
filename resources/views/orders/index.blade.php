@@ -9,21 +9,46 @@
     <div class="overflow-x-auto rounded-2xl border border-gray-200">
         <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
 
-            <form action="{{ route('order.index') }}" method="GET" class="flex items-center" id="date-range-picker">
-                <div class="relative">
-                    <input id="datepicker-range-start" name="start" type="date" class="input"
-                        placeholder="Select date start" value="{{ request()->input('start') }}">
-                </div>
-                <span class="mx-4 text-gray-500">to</span>
-                <div class="relative">
-                    <input id="datepicker-range-end" name="end" type="date" class="input"
-                        placeholder="Select date end" value="{{ request()->input('end') }}">
+            <form action="{{ route('order.index') }}" method="GET" class="flex items-center gap-4" id="date-range-picker">
+                <div class="flex items-center">
+                    <div class="relative">
+                        <input id="datepicker-range-start" name="start" type="date" class="input"
+                            placeholder="Select date start" value="{{ request()->input('start') }}">
+                    </div>
+                    <span class="mx-4 text-gray-500">to</span>
+                    <div class="relative">
+                        <input id="datepicker-range-end" name="end" type="date" class="input"
+                            placeholder="Select date end" value="{{ request()->input('end') }}">
+                    </div>
                 </div>
 
-                <button type="submit" class="button-submit ml-4">
+                <div class="flex items-center">
+                    <label for="simple-search" class="sr-only">Search</label>
+                    <div class="relative w-full">
+                        <input type="text" id="simple-search" name="search"
+                            class="input pl-10"
+                            placeholder="Search by name" value="{{ request('search') }}" autocomplete="off">
+                        <div class="relative" id="customer-list">
+                            <ul id="dropdown-list"
+                                class="absolute z-50 top-full left-0 w-full max-h-48 overflow-y-auto text-sm text-gray-700 rounded-b-lg shadow-lg bg-gray-50 hidden">
+                                @foreach ($customersName as $customerName)
+                                    <li class="customer-item">
+                                        <div class="flex items-center ps-2 rounded-sm hover:bg-gray-100 cursor-pointer">
+                                            <label for="checkbox-item-11"
+                                                class="w-full py-2 text-sm font-medium text-gray-900 rounded-sm">{{ $customerName->name }}</label>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="button-submit">
                     Filter
                 </button>
             </form>
+
             <div
                 class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                 <a href="{{ route('order.index') }}" class="button-delete">
@@ -80,4 +105,9 @@
 
 
     </div>
+
+
+    @push('scripts')
+        <script src="{{ asset('js/search-input.js') }}"></script>
+    @endpush
 </x-layout>

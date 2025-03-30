@@ -21,10 +21,19 @@ class CustomerController extends Controller
             ->orderBy('status', 'desc')
             ->paginate($perPage);
 
+        $customersName = Customer::select('name')
+            ->orderBy('status', 'desc')
+            ->get();
 
         $title = "Customer";
 
-        return view('customers.index', compact('customers', 'perPage', 'title'));
+        // dd(($customers->currentPage()));
+        // dd($customers->onFirstPage());
+        // dd($customers->previousPageUrl());
+        // dd(min($customers->currentPage() * $perPage, $customers->total()));
+        // dd(($customers->currentPage() - 1) * $perPage + 1);
+
+        return view('customers.index', compact('customers', 'perPage', 'title','customersName'));
     }
 
     /**

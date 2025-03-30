@@ -17,13 +17,27 @@
                 <form class="flex items-center" method="GET" action="{{ route('customer.index') }}">
                     <label for="simple-search" class="sr-only">Search</label>
                     <div class="relative w-full">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-900">
-                            <i class="fas fa-search"></i>
-                        </div>
                         <input type="text" id="simple-search" name="search"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full pl-10 p-2"
-                            placeholder="Search by name" value="{{ request('search') }}" required="">
+                            class="input"
+                            placeholder="Search by name" value="{{ request('search') }}"
+                            autocomplete="off">
+                        <div class="relative" id="customer-list">
+                            <ul id="dropdown-list"
+                                class="absolute z-50 top-full left-0 w-full max-h-48 overflow-y-auto text-sm text-gray-700 rounded-b-lg shadow-lg bg-gray-50 hidden">
+                                @foreach ($customersName as $customerName)
+                                    <li class="customer-item">
+                                        <div class="flex items-center ps-2 rounded-sm hover:bg-gray-100 cursor-pointer">
+                                            <label for="checkbox-item-11"
+                                                class="w-full py-2 text-sm font-medium text-gray-900 rounded-sm">{{ $customerName->name }}</label>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
+                    <button type="submit" class="button-submit ml-4">
+                        Filter
+                    </button>
                 </form>
             </div>
             <div
@@ -84,4 +98,8 @@
         </x-table>
         <x-table-navigation :dataset="$customers" :perPage="$perPage" />
     </div>
+
+    @push('scripts')
+        <script src="{{ asset('js/search-input.js') }}"></script>
+    @endpush
 </x-layout>

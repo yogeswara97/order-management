@@ -33,4 +33,5 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('admin', AdminController::class);
 
     Route::get('/chatbot',[ChatbotController::class,'index'])->name('chatbot.index');
+    Route::put('/chatbot',[ChatbotController::class,'update'])->name('chatbot.edit');
 });

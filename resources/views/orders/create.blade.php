@@ -183,6 +183,7 @@
             const button = document.getElementById('modal-button');
             const modal = document.getElementById('default-modal');
             const closeModalButton = document.getElementById('close-modal');
+
             const resetCustomerButton = document.getElementById('reset-customer');
 
             // Customer variable

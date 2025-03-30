@@ -18,9 +18,10 @@ class AdminController extends Controller
         $perPage =30;
         $admins = User::where('name', 'like', "%$search%")->paginate($perPage);
 
+        $adminsName = User::select('name')->get();
         $title = "Admin";
 
-        return view('admin.index', compact('admins', 'perPage','title'));
+        return view('admin.index', compact('admins', 'perPage','title','adminsName'));
     }
 
     /**
