@@ -1,15 +1,14 @@
 <x-layout>
     <x-slot:title>{{ $title }}</x-slot:title>
 
-
     <x-alret></x-alret>
 
     <x-header title="Orders" :breadcrumbs="[['label' => 'Home', 'url' => route('index')], ['label' => 'Orders', 'url' => route('order.index')]]" />
 
     <div class="overflow-x-auto rounded-2xl border border-gray-200">
-        <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
 
-            <form action="{{ route('order.index') }}" method="GET" class="flex items-center" id="date-range-picker">
+        <x-table-header :dataset="$customersName" :create="'Create Order'" :routeReset="route('order.index')" :routeCreate="route('order.create')">
+            <div class="flex items-center">
                 <div class="relative">
                     <input id="datepicker-range-start" name="start" type="date" class="input"
                         placeholder="Select date start" value="{{ request()->input('start') }}">
@@ -19,21 +18,9 @@
                     <input id="datepicker-range-end" name="end" type="date" class="input"
                         placeholder="Select date end" value="{{ request()->input('end') }}">
                 </div>
-
-                <button type="submit" class="button-submit ml-4">
-                    Filter
-                </button>
-            </form>
-            <div
-                class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                <a href="{{ route('order.index') }}" class="button-delete">
-                    Reset Filter
-                </a>
-                <a href="{{ route('order.create') }}" class="button-add">
-                    Create Order
-                </a>
             </div>
-        </div>
+        </x-table-header>
+
         <x-table :headers="['Invoice no', 'Customer Name', 'Date', 'Status', 'Total', 'Action']">
             @foreach ($orders as $order)
                 <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">

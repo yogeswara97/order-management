@@ -13,9 +13,12 @@
     {{-- TABLE --}}
     <div class="overflow-x-auto rounded-2xl border border-gray-200">
 
-        <x-table-header create="Create Customer" :dataset="$customersName">
-
-        </x-table-header>
+        <x-table-header
+            :dataset="$customersName"
+            :create="'Create Customer'"
+            :routeReset="route('customer.index')"
+            :routeCreate="route('customer.create')"
+        />
 
         <x-table :headers="['Name', 'Email', 'Phone', 'Status', 'Country', 'Action']">
             @foreach ($customers as $customer)

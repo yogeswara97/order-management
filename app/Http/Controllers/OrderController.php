@@ -16,21 +16,17 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-
-        $startDate = $request->input('start');
-        $endDate = $request->input('end');
         $perPage = 50;
 
-        $query = Order::with('customer')->orderByDesc('order_date');
+        $orders = Order::with('customer')
+            ->orderByDesc('order_date')
+            ->filter($request->only(['start', 'end', 'search']))
+            ->paginate($perPage);
 
-        if ($startDate && $endDate) {
-            $query->whereBetween('order_date', [$startDate, $endDate]);
-        }
-
-        $orders = $query->paginate($perPage);
+        $customersName = Customer::pluck('name')->toArray();
         $title = "Order";
 
-        return view('orders.index', compact('orders', 'perPage','title'));
+        return view('orders.index', compact('orders', 'perPage', 'title','customersName'));
     }
 
 

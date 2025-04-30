@@ -20,7 +20,7 @@ class AdminController extends Controller
 
         $admins = User::search($search)->paginate($perPage)->withQueryString();
 
-        $adminsName = User::select('name')->get();
+        $adminsName = User::pluck('name')->toArray();
         $title = "Admin";
 
         return view('admin.index', compact('admins', 'perPage', 'title', 'adminsName'));

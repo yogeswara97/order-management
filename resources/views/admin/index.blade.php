@@ -11,33 +11,12 @@
 
     {{-- TABLE --}}
     <div class="overflow-x-auto rounded-2xl border border-gray-200">
-        <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-            <div class="w-full md:w-1/4">
-                <form class="flex items-center" method="GET" action="{{ route('admin.index') }}">
-                    <label for="simple-search" class="sr-only">Search</label>
-                    <div class="relative w-full">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-900">
-                            <i class="fas fa-search"></i>
-                        </div>
-                        <input type="text" id="simple-search" name="search"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full pl-10 p-2"
-                            placeholder="Search by name" value="{{ request('search') }}" required="">
-                    </div>
-                </form>
-            </div>
-            @if (session('user')['role'] == 'super.admin')
-            <div
-                class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                <a href="{{ route('admin.index') }}" class="button-delete">
-                    Reset Filter
-                </a>
-                <a href="{{ route('admin.create') }}" class="button-add">
-                    Create Admin
-                </a>
-            </div>
-            @endif
-        </div>
-
+        <x-table-header
+            :dataset="$adminsName"
+            :create="'Create Admin'"
+            :routeReset="route('admin.index')"
+            :routeCreate="route('admin.create')"
+        />
 
         @php
         $headers = ['Name', 'Email', 'role',];

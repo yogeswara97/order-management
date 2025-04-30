@@ -221,6 +221,3 @@
 </x-layout>
 
 
-{{-- function clearMessages() {
-    const chatMessages = document.getElementById('chat-messages');
-    if (chatMessages) { }}

@@ -11,15 +11,18 @@ class TableHeader extends Component
 {
     public $create;
     public $dataset;
+    public $routeReset;
+    public $routeCreate;
     /**
      * Create a new component instance.
      */
-    public function __construct($create, $dataset)
+    public function __construct($create, $dataset, $routeReset, $routeCreate)
     {
         $this->create = $create;
         $this->dataset = $dataset;
+        $this->routeReset = $routeReset;
+        $this->routeCreate = $routeCreate;
     }
-
     /**
      * Get the view / contents that represent the component.
      */
