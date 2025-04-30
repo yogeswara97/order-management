@@ -15,12 +15,15 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $perPage =30;
-        $admins = User::where('name', 'like', "%$search%")->paginate($perPage);
+        $perPage = 30;
 
+
+        $admins = User::search($search)->paginate($perPage)->withQueryString();
+
+        $adminsName = User::select('name')->get();
         $title = "Admin";
 
-        return view('admin.index', compact('admins', 'perPage','title'));
+        return view('admin.index', compact('admins', 'perPage', 'title', 'adminsName'));
     }
 
     /**

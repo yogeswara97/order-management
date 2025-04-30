@@ -15,16 +15,18 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-
         $perPage = 30;
-        $customers = Customer::where('name', 'like', "%$search%")
-            ->orderBy('status', 'desc')
-            ->paginate($perPage);
 
+        $customers = Customer::search($search)
+            ->orderBy('status', 'desc')
+            ->paginate($perPage)
+            ->withQueryString();
+
+        $customersName = Customer::pluck('name')->toArray();
 
         $title = "Customer";
 
-        return view('customers.index', compact('customers', 'perPage', 'title'));
+        return view('customers.index', compact('customers', 'perPage', 'title', 'customersName'));
     }
 
     /**
