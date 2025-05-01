@@ -202,11 +202,7 @@
         <h2 class="text-gray-900 font-semibold text-xl py-4">Terms and Conditions</h2>
         <hr class="mb-4">
         <div class="mb-6">
-            <textarea id="terms_conditions" name="terms_conditions" rows="4" class="input h-60"
-                    placeholder="Write product description here">{!! $order->terms_conditions !!}
-            </textarea>
-            {{-- <input type="text" name="terms_conditions" id="terms_conditions" class="text-black"> --}}
-            {{-- <x-wysiwyg-flowbite></x-wysiwyg-flowbite> --}}
+            <textarea id="terms_conditions" name="terms_conditions" rows="4" class="input h-60" placeholder="Write product description here">{!! $order->terms_conditions !!}</textarea>
         </div>
 
         <div class="flex justify-end gap-2">
@@ -225,38 +221,6 @@
     <x-customer-modal :customers="$customers" />
 
     @push('scripts')
-        {{-- <script src="{{ asset('quill/quill.js') }}"></script>
-        <script>
-            const checkboxVat = document.getElementById('check_vat');
-            const vatInput = document.getElementById('vat');
-            const form = document.querySelector('form');
-
-            // Add an event listener to the checkboxVat
-            checkboxVat.addEventListener('change', function() {
-                if (checkboxVat.checked) {
-                    vatInput.value = '0';
-                    vatInput.removeAttribute('disabled');
-                } else {
-                    vatInput.value = '0';
-                    vatInput.setAttribute('disabled', 'disabled');
-                }
-            });
-
-
-
-            const quill = new Quill('#editor', {
-                theme: 'snow'
-            });
-
-            quill.root.style.color = '#111';
-
-            form.addEventListener('submit', function() {
-                const termsConditionsInput = document.getElementById('terms_conditions');
-                console.log('hiii');
-
-                termsConditionsInput.value = quill.root.innerHTML;
-            });
-        </script> --}}
         <script>
             // modal variable
             const button = document.getElementById('modal-button');
