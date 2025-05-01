@@ -17,7 +17,8 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'customer_id' => 1,
+            // 'customer_id' => 1,
+            'customer_id' => $this->faker->numberBetween(1, 10),
             'order_date' => $this->faker->dateTimeBetween('2025-02-01', '2025-03-31')->format('Y-m-d'),
             'reference_number' => $this->faker->unique()->randomNumber(8),
             'order_number' => $this->faker->unique()->randomNumber(6),

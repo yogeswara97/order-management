@@ -16,35 +16,29 @@ class OrderItemFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'order_id' => \App\Models\Order::factory(), // Create a new order for each item
-            'image' =>  $this->faker->randomElement(['image/1EUATSfejfNqzUV0U6zfRycgRx3hSR5zlvZYyS4g.png', 'image/2FWYXCUfS28eswlAUG5na6XeIm41c2g1eOC6ianN.png', 'image/TNdY6k1ZKHS9sQJA2DSS7eZtTle2DqnQBbJmiWk7.jpg']),
-            'item_name' => $this->faker->word(),
-            'code' => $this->faker->unique()->randomNumber(6),
-            'description' => $this->faker->sentence(),
-            'size_w' => $this->faker->randomFloat(2, 10, 100),
-            'size_d' => $this->faker->randomFloat(2, 10, 100),
-            'size_h' => $this->faker->randomFloat(2, 10, 100),
-            'color' => $this->faker->colorName(),
-            'quantity' => $this->faker->numberBetween(1, 100),
-            'unit' => $this->faker->randomElement(['kg', 'lb', 'm', 'cm']),
-            'unit_price' => $this->faker->randomFloat(2, 1, 100),
-            'total_price' => $this->faker->randomFloat(2, 10, 1000),
+        $imageOptions = [
+            'image/9yY3xUCrZa6ssgiPWGm4zjcMWB4zZhlFXl9QB2JV.jpg',
+            'image/yrpHnwih8vrjywJujiApXyHVVuuaz7Ftwk6nZDyR.jpg',
         ];
-    }
 
-    /**
-     * Set the order_id to a specific value.
-     *
-     * @param int $orderId
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
-     */
-    public function withOrderId(int $orderId)
-    {
-        return $this->state(function (array $attributes) use ($orderId) {
-            return [
-                'order_id' => $orderId,
-            ];
-        });
+        $unitPrice = $this->faker->numberBetween(10000, 500000);
+        $quantity = $this->faker->numberBetween(1, 10);
+
+        return [
+            'order_id' => $this->faker->numberBetween(1, 30),
+            'image' => $this->faker->randomElement($imageOptions),
+            'item_name' => $this->faker->words(2, true),
+            'code' => $this->faker->bothify('ITM-###??'),
+            'description' => $this->faker->sentence(),
+            'format' => $this->faker->randomElement(['PDF', 'DOCX', 'JPG']),
+            'size_w' => $this->faker->randomFloat(1, 10, 100),
+            'size_d' => $this->faker->randomFloat(1, 10, 100),
+            'size_h' => $this->faker->randomFloat(1, 10, 100),
+            'color' => $this->faker->safeColorName(),
+            'quantity' => $quantity,
+            'unit' => $this->faker->randomElement(['pcs', 'kg', 'm']),
+            'unit_price' => (string) $unitPrice,
+            'total_price' => (string) ($unitPrice * $quantity),
+        ];
     }
 }
