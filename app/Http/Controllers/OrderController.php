@@ -19,7 +19,8 @@ class OrderController extends Controller
         $perPage = 50;
 
         $orders = Order::with('customer')
-            ->orderByDesc('order_date')
+            ->orderByRaw("FIELD(status, 'new', 'quotation', 'invoice')")
+            ->orderByDesc('created_at')
             ->filter($request->only(['start', 'end', 'search']))
             ->paginate($perPage);
 
@@ -109,7 +110,7 @@ class OrderController extends Controller
      */
     public function edit(string $id)
     {
-        $order = Order::with(['orderItems', 'customer'])->findOrFail($id);
+        $order = Order::with([ 'customer'])->findOrFail($id);
         $order_count = count($order->orderItems);
 
         $customers = Customer::all();
@@ -175,7 +176,7 @@ class OrderController extends Controller
 
             $order->update($data);
 
-            return redirect()->route('order.index')->with('success', 'Order updated successfully.');
+            return redirect()->route('order.show', $order->id)->with('success', 'Order updated successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Duplicate entry email ' . $data['customer_email']);
         }
@@ -203,7 +204,6 @@ class OrderController extends Controller
             'orderItemsImage' => $orderItemsImage,
             'customerName' => $customer_name
         ];
-        dd($orderItemsImage);
 
         $itemHeight = 15; // Example height per item in pixels
         $totalHeight = count($order->orderItems) * $itemHeight + 1000;

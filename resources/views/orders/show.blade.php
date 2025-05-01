@@ -7,11 +7,12 @@
     <x-header title="Orders" :breadcrumbs="[
         ['label' => 'Home', 'url' => route('index')],
         ['label' => 'Orders', 'url' => route('order.index')],
-        ['label' => 'Detail Orders', 'url' => route('order.show',$order->id)],
-    ]" >
-        #{{ $order->status == 'quotation' ? 'Quo' : ($order->status == 'invoice' ? 'Inv' : ($order->status == 'new' ? 'New' : 'New')) }}
+        ['label' => 'Detail Orders', 'url' => route('order.show', $order->id)],
+    ]">
+        {{-- #{{ $order->status == 'quotation' ? 'Quo' : ($order->status == 'invoice' ? 'Inv' : ($order->status == 'new' ? 'New' : 'New')) }}
         -{{ $order->id }}
-        -{{ \Carbon\Carbon::parse($order->order_date)->format('Y') }}
+        -{{ \Carbon\Carbon::parse($order->order_date)->format('Y') }} --}}
+        {{ $order->order_number }}
     </x-header>
 
     {{-- FORM --}}
@@ -21,18 +22,19 @@
             {{-- CUSTOMER --}}
             <h2 class="text-gray-900 font-semibold text-xl py-4 flex justify-between items-end">
                 Customer
-                @if ($order->status !== 'new')
-
                 <div>
                     <div class="flex justify-end gap-3">
-                        <a href="{{ route('exportPdf', $order->id) }}"
-                            class="button-delete">
-                            <i class="fas fa-file-pdf"></i>
-                            Export to PDF
+                        <a href="{{ route('order.edit', $order->id) }}" class="button-mini-edit">
+                            Edit
                         </a>
+                        @if ($order->status !== 'new')
+                            <a href="{{ route('exportPdf', $order->id) }}" class="button-delete">
+                                <i class="fas fa-file-pdf"></i>
+                                Export to PDF
+                            </a>
+                        @endif
                     </div>
                 </div>
-                @endif
             </h2>
             <hr class="mb-4">
             <div class="grid gap-6 mb-6 md:grid-cols-2">
@@ -183,10 +185,9 @@
 
     {{-- TABLE --}}
     <div class="flex items-center justify-end space-y-3 md:space-y-0 md:space-x-4 p-4">
-            <a href="{{ route('createItem', $order->id) }}"
-                class="button-add">
-                Create New Item
-            </a>
+        <a href="{{ route('createItem', $order->id) }}" class="button-add">
+            Create New Item
+        </a>
     </div>
     <div class="overflow-x-auto rounded-2xl border border-gray-200">
 

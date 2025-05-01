@@ -7,6 +7,7 @@
 
     <div class="overflow-x-auto rounded-2xl border border-gray-200">
 
+        {{-- TABLE HEAD --}}
         <x-table-header :dataset="$customersName" :create="'Create Order'" :routeReset="route('order.index')" :routeCreate="route('order.create')">
             <div class="flex items-center">
                 <div class="relative">
@@ -21,13 +22,15 @@
             </div>
         </x-table-header>
 
-        <x-table :headers="['Invoice no', 'Customer Name', 'Date', 'Status', 'Total', 'Action']">
+        {{-- tABLE --}}
+        <x-table :headers="['Order no', 'Customer Name', 'Date', 'Status', 'Total', 'Action']">
             @foreach ($orders as $order)
                 <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ $order->status == 'quotation' ? 'Quo' : ($order->status == 'invoice' ? 'Inv' : ($order->status == 'new' ? 'New' : 'New')) }}
+                        {{-- {{ $order->status == 'quotation' ? 'Quo' : ($order->status == 'invoice' ? 'Inv' : ($order->status == 'new' ? 'New' : 'New')) }}
                         -{{ $order->id }}
-                        -{{ \Carbon\Carbon::parse($order->order_date)->format('Y') }}
+                        -{{ \Carbon\Carbon::parse($order->order_date)->format('Y') }} --}}
+                        {{ $order->order_number }}
                     </td>
                     <td
                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap  {{ $order->customer->name ?? 'text-red-600' }} ">
@@ -63,6 +66,8 @@
                 </tr>
             @endforeach
         </x-table>
+
+        {{-- TABLE NAV --}}
         <x-table-navigation :dataset="$orders" :perPage="$perPage" />
 
 
