@@ -158,7 +158,7 @@
                     showLoading();
 
                     try {
-                        const response = await fetch('http://127.0.0.1:5000/query', {
+                        const response = await fetch('http://127.0.0.1:3000/query', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',

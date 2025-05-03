@@ -1,8 +1,8 @@
 <nav class="bg-gray-50 border border-gray-200 fixed top-0 w-full h-16 z-20">
-    <div class="max-w-screen-xl flex flex-wrap sm:ml-64 items-center justify-end mx-auto px-10 py-4">
+    <div class=" flex flex-wrap items-center justify-end mx-auto sm:px-10 py-4">
         <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative text-black">
             <button type="button"
-                class="flex items-center text-sm rounded-full md:me-0 "
+                class="flex items-center text-sm rounded-full"
                 id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
                 data-dropdown-placement="bottom">
                 <span class="h-9 w-9 rounded-full overflow-hidden">
@@ -24,7 +24,7 @@
             <!-- Dropdown menu -->
             <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                 @csrf
-                <div class="z-50 hidden absolute right-0 top-full mt-2 text-base list-none bg-gray-100 border border-gray-200 divide-y divide-gray-100 rounded-lg shadow-sm"
+                <div class="z-50 hidden absolute right-5 sm:right-0 top-full mt-2 text-base list-none bg-gray-100 border border-gray-200 divide-y divide-gray-100 rounded-lg shadow-sm"
                     id="user-dropdown">
                     <ul class="py-2" aria-labelledby="user-menu-button">
                         <li>
