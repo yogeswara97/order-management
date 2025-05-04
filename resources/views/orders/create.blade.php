@@ -92,7 +92,7 @@
                 <label for="order_number" class="block mb-2 text-sm font-medium text-gray-900">Order Number</label>
                 <input type="text" id="order_number" name="order_number"
                     class="input"
-                    placeholder="Order Number" value="New {{ $orderId }} BBP {{ date('Y') }}" readonly>
+                    placeholder="Order Number">
             </div>
 
             <div>

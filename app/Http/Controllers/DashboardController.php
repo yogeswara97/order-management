@@ -13,22 +13,33 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $year = $request->input('year', date('Y'));
-        $monthlyRevenue = $this->getMonthlyRevenue($year);
+
+        // Metrics
         $newOrderCount = $this->getNewOrderCount();
+        $revenueCurrentMonth = $this->getRevenueCurrentMonth();
+        $percentageMonth = $this->gatPercentageMonth();
+        $revenueCurrentYear = $this->getRevenueCurrentYear();
+        $percentageYear = $this->gatPercentageYear();
+        $totalCustomers = $this->getTotalCustomers();
+
+        // Latest Order
+        $orders = $this->getRecentOrders();
+        // Customer Pie
         $customerPercentage = $this->calculateCustomerPercentages();
 
-        $revenueCurrentMonth = $this->getRevenueCurrentMonth();
-        $revenueLastMonth = $this->getRevenueLastMonth();
-        $percentageMonth = $this->gatPercentageMonth();
+        // Revenue Chart
+        $monthlyRevenue = $this->getMonthlyRevenue($year);
+        // Revenue Chart Currency
+        $monthlyRevenueCurrency = $this->getMonthlyRevenueCurrency($year);
 
-        $revenueCurrentYear = $this->getRevenueCurrentYear();
-        $revenueLastYear = $this->getRevenueLastYear();
-        $percentageYear = $this->gatPercentageYear();
+        // Order Count and Revenue
+        $orderCountRevenue = $this->getOrderCountRevenue($year);
+        // Sales Share
+        $salesShare = $this->getSalesShare($year);
 
-        $totalCustomers = $this->getTotalCustomers();
-        $orders = $this->getRecentOrders();
+        // Top Customers by Revenue
 
-        // dd($percentageYear);
+        // dd($percentageMonth);
         $title = 'Home Page';
 
         return view('index', compact(
@@ -39,28 +50,18 @@ class DashboardController extends Controller
             'revenueCurrentYear',
             'percentageYear',
             'percentageMonth',
-            'monthlyRevenue',
             'year',
             'orders',
-            'customerPercentage'
+            'customerPercentage',
+
+            'monthlyRevenue',
+            'monthlyRevenueCurrency',
+
+            'orderCountRevenue',
+            'salesShare',
         ));
     }
 
-    private function getMonthlyRevenue($year)
-    {
-        $monthlyRevenue = [];
-        for ($i = 1; $i <= 12; $i++) {
-            $revenue = Order::whereMonth('order_date', $i)
-                ->whereYear('order_date', $year)
-                ->sum(DB::raw('grand_total * exchange_rate'));
-
-            $monthlyRevenue[] = [
-                'x' => Carbon::create($year, $i)->format('M'),
-                'y' => $revenue,
-            ];
-        }
-        return $monthlyRevenue;
-    }
 
     private function getNewOrderCount()
     {
@@ -100,7 +101,8 @@ class DashboardController extends Controller
         return $revenue;
     }
 
-    private function gatPercentageMonth(){
+    private function gatPercentageMonth()
+    {
         $revenueCurrentMonth = $this->getRevenueCurrentMonth();
         $revenueLastMonth = $this->getRevenueLastMonth();
 
@@ -130,13 +132,14 @@ class DashboardController extends Controller
     }
     private function getRevenueLastYear()
     {
-        $revenue = Order::whereYear('order_date', date('Y') -1 )
+        $revenue = Order::whereYear('order_date', date('Y') - 1)
             ->sum(DB::raw('grand_total * exchange_rate'));
 
         return $revenue;
     }
 
-    private function gatPercentageYear(){
+    private function gatPercentageYear()
+    {
         $revenueCurrentYear = $this->getRevenueCurrentYear() ?? 1;
         $revenueLastYear = $this->getRevenueLastYear();
 
@@ -165,6 +168,121 @@ class DashboardController extends Controller
 
     private function getRecentOrders()
     {
-        return Order::with('customer')->orderByDesc('order_date')->take(5)->get();
+        return Order::with('customer')->orderByDesc('order_date')->where('status', '=', 'new')->take(5)->get();
     }
+
+    private function getMonthlyRevenue($year)
+    {
+        $monthlyRevenue = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $revenue = Order::whereMonth('order_date', $i)
+                ->whereYear('order_date', $year)
+                ->sum(DB::raw('grand_total * exchange_rate'));
+
+            $monthlyRevenue[] = [
+                'x' => Carbon::create($year, $i)->format('M'),
+                'y' => $revenue,
+            ];
+        }
+        return $monthlyRevenue;
+    }
+
+    private function getMonthlyRevenueCurrency($year)
+    {
+
+        $monthlyRevenueCurrency = [];
+
+        // FOR CURRENCIES
+        $currencies = ['idr', 'usd', 'eur'];
+        foreach ($currencies as $currency) {
+            $data = [];
+
+            for ($i = 1; $i <= 12; $i++) {
+                $revenue = Order::whereMonth('order_date', $i)
+                    ->whereYear('order_date', $year)
+                    ->where('currency', $currency)
+                    ->sum(DB::raw('grand_total'));
+
+                $data[] = [
+                    'x' => Carbon::create($year, $i)->format('M'),
+                    'y' => $revenue,
+                ];
+            }
+
+            $monthlyRevenueCurrency[$currency] = $data;
+        }
+
+        // FOR AVERAGE
+        $avgGrowth = [];
+        for ($i = 0; $i < 12; $i++) {
+            $idr = $monthlyRevenueCurrency['idr'][$i]['y'];
+            $usd = $monthlyRevenueCurrency['usd'][$i]['y'];
+            $eur = $monthlyRevenueCurrency['eur'][$i]['y'];
+
+            $avg = ($idr + $usd + $eur) / 3;
+
+            $avgGrowth[] = [
+                'x' => $monthlyRevenueCurrency['idr'][$i]['x'], // for month select one,
+                'y' => round($avg)
+            ];
+        }
+
+        $monthlyRevenueCurrency['avg_growth'] = $avgGrowth;
+
+        return $monthlyRevenueCurrency;
+    }
+
+    private function getOrderCountRevenue($year)
+    {
+        $orderCountRevenue = [
+            'revenue' => [],
+            'order_count' => [],
+            'currency' => []
+        ];
+
+        $currencies = ['idr', 'usd', 'eur'];
+        foreach ($currencies as $currency) {
+            $orders = Order::whereYear('order_date', $year)
+                ->where('currency', $currency)
+                ->selectRaw('SUM(grand_total) as revenue, COUNT(*) as order_count')
+                ->first();
+
+            $orderCountRevenue['revenue'][] = (float) ($orders->revenue ?? 0);
+            $orderCountRevenue['order_count'][] = (int) ($orders->order_count ?? 0);
+            $orderCountRevenue['currency'][] = strtoupper($currency);
+        }
+
+        return $orderCountRevenue;
+    }
+
+    private function getSalesShare($year)
+    {
+        $currencies = ['idr', 'usd', 'eur'];
+        $series = array_fill_keys($currencies,0);
+
+        $result = Order::whereYear('order_date', $year)
+            ->selectRaw('currency, SUM(grand_total) as revenue')
+            ->groupBy('currency')
+            ->get();
+
+        foreach ($result as $row) {
+            if (in_array($row->currency, $currencies)) {
+                $series[$row->currency] = (float) $row->revenue;
+            }
+        }
+
+        $total = array_sum($series);
+
+        $series = $total > 0 ? array_map(fn($value) => round(($value / $total) * 100, 2), $series)  : array_fill(0, 3, 0);
+
+        return [
+            'series' => array_values($series),
+            'labels' => array_map('strtoupper', $currencies)
+        ];
+    }
+
+    // private function getTopCustomersChart()
+    // {
+    //     $Customer = Customer::with
+    // }
 }
