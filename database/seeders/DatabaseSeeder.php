@@ -34,9 +34,9 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin'
         ]);
 
-        Customer::factory()->count(10)->create();
-        // Order::factory()->count(30)->create();
-        // OrderItem::factory()->count(200)->create();
+        Customer::factory()->count(50)->create();
+        Order::factory()->count(60)->create();
+        OrderItem::factory()->count(600)->create();
 
         Chatbot::create([
             'lang' => 'id',

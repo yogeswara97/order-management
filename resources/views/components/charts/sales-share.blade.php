@@ -11,7 +11,7 @@
             </div>
             <div>
                 <h5 class="leading-none text-2xl font-bold text-gray-900 pb-1">Sales Share</h5>
-                <p class="text-sm font-normal text-gray-500">Monthly Revenue for {{ $year }}</p>
+                <p class="text-sm font-normal text-gray-500">Sales Share for {{ $year }}</p>
             </div>
         </div>
     </div>

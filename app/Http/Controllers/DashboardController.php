@@ -12,18 +12,17 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        $title = 'Home Page';
         $year = $request->input('year', date('Y'));
 
         // Metrics
         $newOrderCount = $this->getNewOrderCount();
-        $revenueCurrentMonth = $this->getRevenueCurrentMonth();
-        $percentageMonth = $this->gatPercentageMonth();
+        $totalOrder = $this->getTotalOrder();
         $revenueCurrentYear = $this->getRevenueCurrentYear();
-        $percentageYear = $this->gatPercentageYear();
         $totalCustomers = $this->getTotalCustomers();
 
         // Latest Order
-        $orders = $this->getRecentOrders();
+        $latestOrders = $this->getLatestOrders();
         // Customer Pie
         $customerPercentage = $this->calculateCustomerPercentages();
 
@@ -40,19 +39,18 @@ class DashboardController extends Controller
         // Top Customers by Revenue
         $topCustomersOrder = $this->getTopCustomersOrder();
         $topCustomersRevenue = $this->getTopCustomersRevenue();
-        // dd($topCustomersRevenue);
-        $title = 'Home Page';
+
 
         return view('index', compact(
             'title',
-            'totalCustomers',
-            'revenueCurrentMonth',
-            'newOrderCount',
-            'revenueCurrentYear',
-            'percentageYear',
-            'percentageMonth',
             'year',
-            'orders',
+
+            'newOrderCount',
+            'totalOrder',
+            'revenueCurrentYear',
+            'totalCustomers',
+
+            'latestOrders',
             'customerPercentage',
 
             'monthlyRevenue',
@@ -72,6 +70,48 @@ class DashboardController extends Controller
         return Order::where('status', 'new')->count();
     }
 
+    private function getTotalOrder()
+    {
+        return Order::count();
+    }
+
+    private function getRevenueCurrentYear()
+    {
+        $revenueCurrentYear = Order::whereYear('order_date', date('Y'))
+            ->sum(DB::raw('grand_total * exchange_rate'));
+
+        $revenueLastYear = Order::whereYear('order_date', date('Y') - 1)
+            ->sum(DB::raw('grand_total * exchange_rate'));
+
+        if ($revenueLastYear == 0) {
+            return [
+                "revenue" => $revenueCurrentYear,
+                "percentage" => 0,
+                "status" => "flat"
+            ];
+        }
+
+        $percentage = intval((($revenueCurrentYear - $revenueLastYear) / $revenueLastYear) * 100);
+        $status = $percentage > 0 ? "up" : ($percentage < 0 ? "down" : "flat");
+        $percentage = abs($percentage);
+
+        return [
+            "revenue" => $revenueCurrentYear,
+            "percentage" => $percentage,
+            "status" => $status
+        ];
+    }
+
+    private function getTotalCustomers()
+    {
+        return Customer::count();
+    }
+
+    private function getLatestOrders()
+    {
+        return Order::with('customer')->orderByDesc('order_date')->where('status', '=', 'new')->take(5)->get();
+    }
+
     private function calculateCustomerPercentages()
     {
         $totalCustomers = Customer::count();
@@ -85,94 +125,6 @@ class DashboardController extends Controller
             'member' => number_format($memberPercentage, 2),
             'common' => number_format($commonPercentage, 2)
         ];
-    }
-
-    private function getRevenueCurrentMonth()
-    {
-        $revenue = Order::whereMonth('order_date', date('n'))
-            ->whereYear('order_date', date('Y'))
-            ->sum(DB::raw('grand_total * exchange_rate'));
-
-        return $revenue;
-    }
-    private function getRevenueLastMonth()
-    {
-
-        $revenue = Order::whereMonth('order_date', date('n') - 1)
-            ->whereYear('order_date', date('Y'))
-            ->sum(DB::raw('grand_total * exchange_rate'));
-
-        return $revenue;
-    }
-
-    private function gatPercentageMonth()
-    {
-        $revenueCurrentMonth = $this->getRevenueCurrentMonth();
-        $revenueLastMonth = $this->getRevenueLastMonth();
-
-        if ($revenueLastMonth == 0) {
-            return [
-                "percentage" => 0,
-                "status" => "flat"
-            ];
-        }
-
-        $percentage = intval((($revenueCurrentMonth - $revenueLastMonth) / $revenueLastMonth) * 100);
-        $status = $percentage > 0 ? "up" : ($percentage < 0 ? "down" : "flat");
-        $percentage = abs($percentage);
-
-        return [
-            "percentage" => $percentage,
-            "status" => $status
-        ];
-    }
-
-    private function getRevenueCurrentYear()
-    {
-        $revenue = Order::whereYear('order_date', date('Y'))
-            ->sum(DB::raw('grand_total * exchange_rate'));
-
-        return $revenue;
-    }
-    private function getRevenueLastYear()
-    {
-        $revenue = Order::whereYear('order_date', date('Y') - 1)
-            ->sum(DB::raw('grand_total * exchange_rate'));
-
-        return $revenue;
-    }
-
-    private function gatPercentageYear()
-    {
-        $revenueCurrentYear = $this->getRevenueCurrentYear() ?? 1;
-        $revenueLastYear = $this->getRevenueLastYear();
-
-        if ($revenueLastYear == 0) {
-            return [
-                "percentage" => 0,
-                "status" => "flat"
-            ];
-        }
-
-        $percentage = intval((($revenueCurrentYear - $revenueLastYear) / $revenueLastYear) * 100);
-        $status = $percentage > 0 ? "up" : ($percentage < 0 ? "down" : "flat");
-        $percentage = abs($percentage);
-
-        return [
-            "percentage" => $percentage,
-            "status" => $status
-        ];
-    }
-
-
-    private function getTotalCustomers()
-    {
-        return Customer::count();
-    }
-
-    private function getRecentOrders()
-    {
-        return Order::with('customer')->orderByDesc('order_date')->where('status', '=', 'new')->take(5)->get();
     }
 
     private function getMonthlyRevenue($year)

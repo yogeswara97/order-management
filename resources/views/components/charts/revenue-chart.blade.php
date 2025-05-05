@@ -14,16 +14,6 @@
                 <p class="text-sm font-normal text-gray-500">Monthly Revenue for {{ $year }}</p>
             </div>
         </div>
-
-        <div class="flex items-center justify-center gap-4">
-            <a href="{{ route('index', ['year' => $year - 1]) }}" class="button-mini-show flex items-center gap-2">
-                <i class="fa-solid fa-arrow-left"></i>
-            </a>
-            <span class="text-gray-900 font-bold text-lg">{{ $year }}</span>
-            <a href="{{ route('index', ['year' => $year + 1]) }}" class="button-mini-show flex items-center gap-2">
-                <i class="fa-solid fa-arrow-right"></i>
-            </a>
-        </div>
     </div>
 
     <div id="revenue-chart" class="text-gray-900"></div>

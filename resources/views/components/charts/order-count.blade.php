@@ -10,13 +10,13 @@
                 <i class="fas fa-chart-line text-blue-800"></i>
             </div>
             <div>
-                <h5 class="leading-none text-2xl font-bold text-gray-900 pb-1">Order Count and Revenue</h5>
-                <p class="text-sm font-normal text-gray-500">Monthly Revenue for {{ $year }}</p>
+                <h5 class="leading-none text-2xl font-bold text-gray-900 pb-1">Order Count</h5>
+                <p class="text-sm font-normal text-gray-500">Order Count for {{ $year }}</p>
             </div>
         </div>
     </div>
 
-    <div id="order-count-revenue" class="text-gray-900"></div>
+    <div id="order-count" class="text-gray-900"></div>
 
 </div>
 
@@ -26,16 +26,12 @@
         {{-- Order Count and Revenue --}}
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                const orderCountRevenueOption = () => {
+                const orderCountOption = () => {
                     const data = @json($orderCountRevenue);
                     console.log(data);
 
                     return {
-                        series: [{
-                                name: 'Revenue',
-                                type: 'column',
-                                data: data.revenue
-                            },
+                        series: [
                             {
                                 name: 'Order',
                                 type: 'column',
@@ -50,14 +46,14 @@
                                 show: false
                             }
                         },
-                        colors: ["#1C64F2", "#16BDCA"], // Biru, hijau, pink, oranye
+                        colors: ["#16BDCA"], // Biru, hijau, pink, oranye
                         stroke: {
                             width: [0, 0, 0, 3],
                             curve: 'smooth'
                         },
                         plotOptions: {
                             bar: {
-                                columnWidth: '40%',
+                                columnWidth: '80%',
                                 borderRadius: 5,
                             }
                         },
@@ -126,9 +122,9 @@
                     }
                 }
 
-                if (document.getElementById("order-count-revenue") && typeof ApexCharts !== 'undefined') {
-                    const chart = new ApexCharts(document.getElementById("order-count-revenue"),
-                        orderCountRevenueOption());
+                if (document.getElementById("order-count") && typeof ApexCharts !== 'undefined') {
+                    const chart = new ApexCharts(document.getElementById("order-count"),
+                        orderCountOption());
                     chart.render();
                 }
             })
