@@ -38,8 +38,9 @@ class DashboardController extends Controller
         $salesShare = $this->getSalesShare($year);
 
         // Top Customers by Revenue
-
-        // dd($percentageMonth);
+        $topCustomersOrder = $this->getTopCustomersOrder();
+        $topCustomersRevenue = $this->getTopCustomersRevenue();
+        // dd($topCustomersRevenue);
         $title = 'Home Page';
 
         return view('index', compact(
@@ -59,6 +60,9 @@ class DashboardController extends Controller
 
             'orderCountRevenue',
             'salesShare',
+
+            'topCustomersOrder',
+            'topCustomersRevenue'
         ));
     }
 
@@ -258,16 +262,16 @@ class DashboardController extends Controller
     private function getSalesShare($year)
     {
         $currencies = ['idr', 'usd', 'eur'];
-        $series = array_fill_keys($currencies,0);
+        $series = array_fill_keys($currencies, 0);
 
         $result = Order::whereYear('order_date', $year)
-            ->selectRaw('currency, SUM(grand_total) as revenue')
+            ->selectRaw('currency, count(orders.id) as total_orders')
             ->groupBy('currency')
             ->get();
 
         foreach ($result as $row) {
             if (in_array($row->currency, $currencies)) {
-                $series[$row->currency] = (float) $row->revenue;
+                $series[$row->currency] = (float) $row->total_orders;
             }
         }
 
@@ -281,8 +285,33 @@ class DashboardController extends Controller
         ];
     }
 
-    // private function getTopCustomersChart()
-    // {
-    //     $Customer = Customer::with
-    // }
+    private function getTopCustomersOrder()
+    {
+        $topCustomers = Customer::select('customers.name')
+            ->withCount('orders')
+            ->orderByDesc('orders_count')
+            ->take(10)
+            ->get();
+
+        return $data = [
+            "data" => $topCustomers->pluck('orders_count')->toArray(),
+            "categories" => $topCustomers->pluck('name')->toArray()
+        ];
+    }
+
+    private function getTopCustomersRevenue()
+    {
+        $topCustomers = Customer::select('customers.name')
+            ->leftJoin('orders', 'orders.customer_id', '=', 'customers.id')
+            ->selectRaw('COALESCE(SUM(orders.grand_total * orders.exchange_rate), 0) AS total_orders')
+            ->groupBy('customers.id', 'customers.name')
+            ->orderByDesc('total_orders')
+            ->take(10)
+            ->get();
+
+        return $data = [
+            "data" => $topCustomers->pluck('total_orders')->toArray(),
+            "categories" => $topCustomers->pluck('name')->toArray()
+        ];
+    }
 }

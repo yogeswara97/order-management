@@ -35,7 +35,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Customer::factory()->count(10)->create();
-
         // Order::factory()->count(30)->create();
         // OrderItem::factory()->count(200)->create();
 

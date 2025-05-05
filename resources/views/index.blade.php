@@ -95,7 +95,6 @@
     <section>
         <div class="gap-4 mb-4 flex flex-col xl:flex-row">
             {{-- Order Count and Revenue --}}
-
             <x-charts.order-count-revenue :year="$year" :orderCountRevenue="$orderCountRevenue"/>
 
             {{-- Sales Share by Currency --}}
@@ -109,9 +108,9 @@
     <section>
         <div class="gap-4 mb-4 flex flex-col xl:flex-row">
             {{-- TOP CUTSOMERS BY REVENUE AND ORDER --}}
-            <x-charts.top-customer-revenue />
+            <x-charts.top-customer-revenue :topCustomersChart="$topCustomersRevenue"/>
             {{-- TOP CUTSOMERS BY REVENUE AND ORDER --}}
-            <x-charts.top-customer-order />
+            <x-charts.top-customer-order :topCustomersOrder="$topCustomersOrder"/>
         </div>
     </section>
 

@@ -1,4 +1,5 @@
 @props([
+    'topCustomersChart' => [],
 ])
 
 
@@ -9,7 +10,7 @@
                 <i class="fas fa-chart-bar text-blue-800"></i>
             </div>
             <div>
-                <h5 class="leading-none text-2xl font-bold text-gray-900 pb-1">Top Customers by Revenue</h5>
+                <h5 class="leading-none text-2xl font-bold text-gray-900 pb-1">Top Customers by Revenue (IDR)</h5>
                 <p class="text-sm font-normal text-gray-500">Top Customers by Revenue</p>
             </div>
         </div>
@@ -23,7 +24,9 @@
     @push('scripts')
         {{-- TOP CUTSOMERS BY REVENUE --}}
         <script>
-            document.addEventListener('DOMContentLoaded', function(){
+            document.addEventListener('DOMContentLoaded', function() {
+                const data = @json($topCustomersChart);
+
                 const topCustomersOption = {
                     chart: {
                         type: "bar",
@@ -36,9 +39,10 @@
                             enabled: false
                         }
                     },
+                    // for data
                     series: [{
-                        name: "Transactions 2023",
-                        data: [10000, 42000, 55000, 67000, 66000, 61000, 48000, 33000, 40000, 56000]
+                        name: "Total Order",
+                        data: data.data
                     }, ],
                     plotOptions: {
                         bar: {
@@ -64,18 +68,20 @@
                         enabled: false
                     },
                     xaxis: {
-                        categories: [
-                            "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Impedit, repellat!", "February",
-                            "March", "April", "May", "June",
-                            "July", "August", "September", "October",
-                        ],
+                        // for customer name
+                        categories: data.categories,
                         labels: {
                             style: {
                                 colors: "#6B7280",
                                 fontSize: "12px",
                                 fontWeight: 400
                             },
-                            formatter: (value) => value >= 1000 ? `${value / 1000}k` : value
+                            formatter: (value) => {
+                                if (value >= 1000) {
+                                    return new Intl.NumberFormat('id-ID').format(value / 1000) + 'k';
+                                }
+                                return new Intl.NumberFormat('id-ID').format(value);
+                            }
                         }
                     },
                     yaxis: {
@@ -89,11 +95,6 @@
                                 fontWeight: 400
                             },
                             formatter: title => title
-                        }
-                    },
-                    tooltip: {
-                        y: {
-                            formatter: (value) => `$${value >= 1000 ? `${value / 1000}k` : value}`
                         }
                     },
                     states: {

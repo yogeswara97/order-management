@@ -1,3 +1,7 @@
+@props([
+    "topCustomersOrder" => []
+])
+
 <div class="rounded-2xl border border-gray-200 bg-white p-6 md:p-8 flex-1">
     <div class="flex justify-between pb-4 mb-4 border-b border-gray-200">
         <div class="flex items-center">
@@ -20,6 +24,7 @@
         {{-- TOP CUTSOMERS BY ORDER --}}
         <script>
             document.addEventListener('DOMContentLoaded', function() {
+                const data = @json($topCustomersOrder);
                 const topCustomersOrderOption = {
                     chart: {
                         type: "bar",
@@ -32,9 +37,10 @@
                             enabled: false
                         }
                     },
+                    // for data
                     series: [{
-                        name: "Transactions 2023",
-                        data: [10000, 42000, 55000, 67000, 66000, 61000, 48000, 33000, 40000, 56000]
+                        name: "Total Order",
+                        data: data.data
                     }, ],
                     plotOptions: {
                         bar: {
@@ -60,12 +66,8 @@
                         enabled: false
                     },
                     xaxis: {
-                        categories: [
-                            "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Impedit, repellat!",
-                            "February",
-                            "March", "April", "May", "June",
-                            "July", "August", "September", "October",
-                        ],
+                        // for customer name
+                        categories: data.categories,
                         labels: {
                             style: {
                                 colors: "#6B7280",

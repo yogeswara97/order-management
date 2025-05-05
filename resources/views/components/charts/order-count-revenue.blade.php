@@ -95,7 +95,7 @@
                             shared: true,
                             intersect: false,
                             y: {
-                                formatter: value => `$${value >= 1000 ? `${value / 1000}k` : value}`
+                                formatter: value => `${value >= 1000 ? `${value / 1000}k` : value}`
                             }
                         },
                         legend: {
