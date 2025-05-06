@@ -20,6 +20,16 @@
                         placeholder="Select date end" value="{{ request()->input('end') }}">
                 </div>
             </div>
+            <div class="w-full sm:w-28">
+                <select id="status" name="status" class="select w-full">
+                    <option value="">All Status</option>
+                    <option value="new" {{ request('status') === 'new' ? 'selected' : '' }}>New</option>
+                    <option value="quotation" {{ request('status') === 'quotation' ? 'selected' : '' }}>Quotation</option>
+                    <option value="invoice" {{ request('status') === 'invoice' ? 'selected' : '' }}>Invoice</option>
+                    <option value="paid" {{ request('status') === 'paid' ? 'selected' : '' }}>Paid</option>
+                    <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                </select>
+            </div>
         </x-table-header>
 
         {{-- tABLE --}}
@@ -27,9 +37,6 @@
             @foreach ($orders as $order)
                 <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{-- {{ $order->status == 'quotation' ? 'Quo' : ($order->status == 'invoice' ? 'Inv' : ($order->status == 'new' ? 'New' : 'New')) }}
-                        -{{ $order->id }}
-                        -{{ \Carbon\Carbon::parse($order->order_date)->format('Y') }} --}}
                         {{ $order->order_number }}
                     </td>
                     <td
@@ -41,12 +48,16 @@
                     </td>
                     <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         <span
-                            class=" flex items-center justify-center p-2  rounded-md
+                            class=" flex items-center justify-center p-2 rounded-md capitalize
                                 @if ($order->status == 'new') bg-blue-400 text-blue-950 bg-opacity-60
                                 @elseif ($order->status == 'quotation')
-                                    bg-yellow-400 text-yellow-950 bg-opacity-60
+                                    bg-slate-400 text-slate-950 bg-opacity-60
                                 @elseif ($order->status == 'invoice')
-                                    bg-green-400 text-green-950 bg-opacity-60 @endif
+                                    bg-yellow-400 text-yellow-950 bg-opacity-60
+                                @elseif ($order->status == 'paid')
+                                    bg-green-400 text-green-950 bg-opacity-60
+                                @elseif ($order->status == 'cancelled')
+                                    bg-red-400 text-red-950 bg-opacity-60 @endif
                             ">
                             {{ $order->status }}
                         </span>

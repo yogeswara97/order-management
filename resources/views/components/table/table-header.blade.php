@@ -1,8 +1,8 @@
-<div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+<div class="flex flex-col xl:flex-row xl:items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4 gap-2">
 
     {{-- SEARCH --}}
-    <div class="w-full md:w-1/4">
-        <form class="flex items-center gap-3">
+    <div class="w-full ">
+        <form class="flex flex-col lg:flex-row lg:items-center gap-3">
             {{ $slot }}
             <x-search :dataset="$dataset"></x-search>
             <button type="submit" class="button-submit">

@@ -125,6 +125,8 @@
                     <option value="quotation" {{ $order->status == 'quotation' ? 'selected' : '' }}>Quotation
                     </option>
                     <option value="invoice" {{ $order->status == 'invoice' ? 'selected' : '' }}>Invoice</option>
+                    <option value="paid" {{ $order->status == 'paid' ? 'selected' : '' }}>Paid</option>
+                    <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                 </select>
             </div>
 

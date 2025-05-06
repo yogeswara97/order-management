@@ -63,5 +63,10 @@ class Order extends Model
                     $q->where('name', 'like', '%' . $search . '%')
                 )
         );
+
+        $query->when(
+            $filters['status'] ?? false,
+            fn($query, $status) => $query->where('status', $status)
+        );
     }
 }

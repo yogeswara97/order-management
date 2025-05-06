@@ -19,10 +19,11 @@ class OrderController extends Controller
         $perPage = 50;
 
         $orders = Order::with('customer')
-            ->orderByRaw("FIELD(status, 'new', 'quotation', 'invoice')")
+            ->orderByRaw("FIELD(status, 'new', 'quotation', 'invoice','paid','cancelled')")
             ->orderByDesc('created_at')
-            ->filter($request->only(['start', 'end', 'search']))
-            ->paginate($perPage);
+            ->filter($request->only(['start', 'end', 'search','status']))
+            ->paginate($perPage)
+            ->withQueryString();
 
         $customersName = Customer::pluck('name')->toArray();
         $title = "Order";
@@ -64,7 +65,7 @@ class OrderController extends Controller
             'order_number' => 'nullable|string|max:255',
             'object' => 'nullable|string|max:255',
             'cargo' => 'nullable|string|max:255',
-            'status' => 'required|in:new,quotation,invoice',
+            'status' => 'required|in:new,quotation,invoice,paid,cancelled',
             'currency' => 'required|string|max:10',
             'exchange_rate' => 'integer',
             'vat' => 'nullable|numeric|max:100',
@@ -136,7 +137,7 @@ class OrderController extends Controller
             'order_number' => 'nullable|string|max:255',
             'object' => 'nullable|string|max:255',
             'cargo' => 'nullable|string|max:255',
-            'status' => 'required|in:new,quotation,invoice',
+            'status' => 'required|in:new,quotation,invoice,paid,cancelled',
             'currency' => 'nullable|string|max:10',
             'exchange_rate' => 'required|integer',
             'vat' => 'nullable|numeric|max:100',

@@ -120,6 +120,8 @@
                     <option value="new" {{ old('status') == 'new' ? 'selected' : '' }}>New</option>
                     <option value="quotation" {{ old('status') == 'quotation' ? 'selected' : '' }}>Quotation</option>
                     <option value="invoice" {{ old('status') == 'invoice' ? 'selected' : '' }}>Invoice</option>
+                    <option value="paid" {{ old('status') == 'paid' ? 'selected' : '' }}>Paid</option>
+                    <option value="cancelled" {{ old('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                 </select>
             </div>
 
