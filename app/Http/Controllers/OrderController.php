@@ -21,14 +21,19 @@ class OrderController extends Controller
         $orders = Order::with('customer')
             ->orderByRaw("FIELD(status, 'new', 'quotation', 'invoice','paid','cancelled')")
             ->orderByDesc('created_at')
-            ->filter($request->only(['start', 'end', 'search','status']))
+            ->filter($request->only(['start', 'end', 'search', 'status']))
             ->paginate($perPage)
             ->withQueryString();
+
+        $statusCounts = Order::selectRaw("status, COUNT(*) as total")
+            ->groupBy('status')
+            ->pluck('total', 'status')
+            ->all();
 
         $customersName = Customer::pluck('name')->toArray();
         $title = "Order";
 
-        return view('orders.index', compact('orders', 'perPage', 'title','customersName'));
+        return view('orders.index', compact('orders', 'perPage', 'title', 'customersName','statusCounts'));
     }
 
 
@@ -111,7 +116,7 @@ class OrderController extends Controller
      */
     public function edit(string $id)
     {
-        $order = Order::with([ 'customer'])->findOrFail($id);
+        $order = Order::with(['customer'])->findOrFail($id);
         $order_count = count($order->orderItems);
 
         $customers = Customer::all();
@@ -199,7 +204,7 @@ class OrderController extends Controller
         }
 
         $data = [
-            'title' => $order->status . ' - ' . $order->order_date .' - ' . $customer_name,
+            'title' => $order->status . ' - ' . $order->order_date . ' - ' . $customer_name,
             'order' => $order,
             'orderItems' => $order->orderItems,
             'orderItemsImage' => $orderItemsImage,

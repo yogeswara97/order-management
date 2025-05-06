@@ -5,6 +5,17 @@
 
     <x-header title="Orders" :breadcrumbs="[['label' => 'Home', 'url' => route('index')], ['label' => 'Orders', 'url' => route('order.index')]]" />
 
+    {{-- METRICS --}}
+    <section>
+        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 mb-4">
+            <x-dashboard.metric-card icon="fas fa-inbox" title="New" :value="$statusCounts['new'] ?? 0" />
+            <x-dashboard.metric-card icon="fas fa-inbox" title="Quotation" :value="$statusCounts['quotation'] ?? 0" />
+            <x-dashboard.metric-card icon="fas fa-inbox" title="Invoice" :value="$statusCounts['invoice'] ?? 0" />
+            <x-dashboard.metric-card icon="fas fa-inbox" title="Paid" :value="$statusCounts['paid'] ?? 0" />
+            <x-dashboard.metric-card icon="fas fa-inbox" title="Cancelled" :value="$statusCounts['cancelled'] ?? 0" />
+        </div>
+    </section>
+
     <div class="overflow-x-auto rounded-2xl border border-gray-200">
 
         {{-- TABLE HEAD --}}
@@ -24,10 +35,12 @@
                 <select id="status" name="status" class="select w-full">
                     <option value="">All Status</option>
                     <option value="new" {{ request('status') === 'new' ? 'selected' : '' }}>New</option>
-                    <option value="quotation" {{ request('status') === 'quotation' ? 'selected' : '' }}>Quotation</option>
+                    <option value="quotation" {{ request('status') === 'quotation' ? 'selected' : '' }}>Quotation
+                    </option>
                     <option value="invoice" {{ request('status') === 'invoice' ? 'selected' : '' }}>Invoice</option>
                     <option value="paid" {{ request('status') === 'paid' ? 'selected' : '' }}>Paid</option>
-                    <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                    <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Cancelled
+                    </option>
                 </select>
             </div>
         </x-table-header>
