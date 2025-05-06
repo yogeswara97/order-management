@@ -31,9 +31,8 @@
                             upload</span> or drag and drop</p>
                     <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                 </div>
-                <img id="preview" src="" alt="Image Preview"
-                    class="hidden max-w-full max-h-full object-cover my-2" />
-                <input id="dropzone-file" type="file" class="hidden" name="image" accept="image/*" />
+                <img id="preview" src="" alt="Image Preview" class="hidden max-w-full max-h-full object-cover my-2" />
+                <input id="dropzone-file" type="file" class="hidden" name="image" accept="image/*" value="" />
             </label>
         </div>
 
@@ -42,23 +41,23 @@
 
             <div>
                 <label for="item_name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
-                <input type="text" id="item_name" name="item_name" class="input" placeholder="Item Name">
+                <input type="text" id="item_name" name="item_name" class="input" placeholder="Item Name" value="{{ old('item_name') }}">
             </div>
 
             <div>
                 <label for="code" class="block mb-2 text-sm font-medium text-gray-900">Code</label>
-                <input type="text" id="code" name="code" class="input" placeholder="Code">
+                <input type="text" id="code" name="code" class="input" placeholder="Code" value="{{ old('code') }}">
             </div>
 
             <div>
                 <label for="color" class="block mb-2 text-sm font-medium text-gray-900">Color</label>
-                <input type="text" id="color" name="color" class="input" placeholder="Color">
+                <input type="text" id="color" name="color" class="input" placeholder="Color" value="{{ old('color') }}">
             </div>
 
 
             <div>
                 <label for="unit" class="block mb-2 text-sm font-medium text-gray-900">Unit</label>
-                <input type="text" id="unit" name="unit" class="input" placeholder="Unit">
+                <input type="text" id="unit" name="unit" class="input" placeholder="Unit" value="{{ old('unit') }}">
             </div>
 
         </div>
@@ -70,12 +69,12 @@
                     Unit Price
                     <span class="uppercase">({{ $currency }})</span>
                 </label>
-                <input type="number" id="unit_price" name="unit_price" class="input" placeholder="Unit Price">
+                <input type="number" id="unit_price" name="unit_price" class="input" placeholder="Unit Price" value="{{ old('unit_price') }}">
             </div>
 
             <div>
                 <label for="quantity" class="block mb-2 text-sm font-medium text-gray-900">Quantity</label>
-                <input type="number" id="quantity" name="quantity" class="input" placeholder="Quantity">
+                <input type="number" id="quantity" name="quantity" class="input" placeholder="Quantity" value="{{ old('quantity') }}">
             </div>
 
             <div>
@@ -83,9 +82,9 @@
                     Total Price
                     <span class="uppercase">({{ $currency }})</span>
                 </label>
-                <input type="text" id="total_price" class="input" value="0.00" placeholder="Total Price" readonly>
+                <input type="text" id="total_price" class="input" value="0.00" placeholder="Total Price" readonly value="{{ old('total_price') }}">
             </div>
-            <input type="hidden" id="total_price_hidden" name="total_price" class="text-black border-black">
+            <input type="hidden" id="total_price_hidden" name="total_price" class="text-black border-black" value="{{ old('total_price_hidden') }}">
 
 
         </div>
@@ -94,23 +93,23 @@
             <div>
                 <label for="format" class="block mb-2 text-sm font-medium text-gray-900">Format</label>
                 <select id="format" name="format" class="select">
-                    <option value="mm">Milimeters</option>
-                    <option value="cm">Centimeters </option>
+                    <option value="mm" {{ old('format') == 'mm' ? 'selected' : '' }}>Milimeters</option>
+                    <option value="cm" {{ old('format') == 'cm' ? 'selected' : '' }}>Centimeters</option>
                 </select>
             </div>
             <div>
                 <label for="size_w" class="block mb-2 text-sm font-medium text-gray-900">Width (W)</label>
-                <input type="number" id="size_w" name="size_w" class="input" placeholder="Width">
+                <input type="number" id="size_w" name="size_w" class="input" placeholder="Width" value="{{ old('size_w') }}">
             </div>
 
             <div>
                 <label for="size_d" class="block mb-2 text-sm font-medium text-gray-900">Depth (D)</label>
-                <input type="number" id="size_d" name="size_d" class="input" placeholder="Depth">
+                <input type="number" id="size_d" name="size_d" class="input" placeholder="Depth" value="{{ old('size_d') }}">
             </div>
 
             <div>
                 <label for="size_h" class="block mb-2 text-sm font-medium text-gray-900">Height (H)</label>
-                <input type="number" id="size_h" name="size_h" class="input" placeholder="Height">
+                <input type="number" id="size_h" name="size_h" class="input" placeholder="Height" value="{{ old('size_h') }}">
             </div>
         </div>
 
@@ -118,7 +117,7 @@
             <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
             <textarea id="description" name="description" rows="4"
                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Write product description here" oninput="replaceNewlinesWithBr(this)"></textarea>
+                placeholder="Write product description here" oninput="replaceNewlinesWithBr(this)">{{ old('description') }}</textarea>
         </div>
 
         <div class="flex justify-end gap-2">
@@ -132,8 +131,8 @@
     </form>
 
     @push('scripts')
-        <script>
-            const unitPrice = document.getElementById('unit_price');
+    <script>
+        const unitPrice = document.getElementById('unit_price');
             const qty = document.getElementById('quantity');
             const total_price = document.getElementById('total_price');
             const total_price_hidden = document.getElementById('total_price_hidden');
@@ -143,8 +142,7 @@
             const currency = "{{ $currency }}";
 
             function calculateTotalPrice() {
-                const price = parseFloat(unitPrice.value.replace(/\./g, '').replace(/[^0-9]/g, '')) ||
-                    0; // Menghapus titik dan simbol mata uang sebelum parsing
+                const price = parseFloat(unitPrice.value.replace(/\./g, '').replace(/[^0-9]/g, '')) || 0;
                 const quantity = parseInt(qty.value) || 0;
                 const total = price * quantity;
 
@@ -183,18 +181,18 @@
             }
 
             // Call calculateTotalPrice on page load
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 calculateTotalPrice();
             });
 
             unitPrice.addEventListener('input', calculateTotalPrice);
             qty.addEventListener('input', calculateTotalPrice);
 
-            imageInput.addEventListener('change', function() {
+            imageInput.addEventListener('change', function () {
                 const file = this.files[0];
                 if (file) {
                     const reader = new FileReader();
-                    reader.onload = function(event) {
+                    reader.onload = function (event) {
                         preview.src = event.target.result;
                         previewElement.classList.add('hidden');
                         preview.classList.remove('hidden');
@@ -205,7 +203,7 @@
                     previewElement.classList.remove('hidden');
                 }
             });
-        </script>
+    </script>
     @endpush
 
 </x-layout>

@@ -85,6 +85,7 @@
                     Number</label>
                 <input type="text" id="reference_number" name="reference_number"
                     class="input"
+                    value="{{ old('reference_number') }}"
                     placeholder="Reference Number">
             </div>
 
@@ -92,6 +93,7 @@
                 <label for="order_number" class="block mb-2 text-sm font-medium text-gray-900">Order Number</label>
                 <input type="text" id="order_number" name="order_number"
                     class="input"
+                    value="{{ old('order_number') }}"
                     placeholder="Order Number">
             </div>
 
@@ -99,6 +101,7 @@
                 <label for="object" class="block mb-2 text-sm font-medium text-gray-900">Object</label>
                 <input type="text" id="object" name="object"
                     class="input"
+                    value="{{ old('object') }}"
                     placeholder="object">
             </div>
         </div>
@@ -107,16 +110,16 @@
                 <label for="cargo" class="block mb-2 text-sm font-medium text-gray-900">Cargo</label>
                 <input type="text" id="cargo" name="cargo"
                     class="input"
+                    value="{{ old('cargo') }}"
                     placeholder="Cargo">
             </div>
 
             <div>
                 <label for="status" class="block mb-2 text-sm font-medium text-gray-900">Status</label>
-                <select id="status" name="status"
-                    class="select">
-                    <option value="new">New</option>
-                    <option value="quotation">Quotation</option>
-                    <option value="invoice">Invoice</option>
+                <select id="status" name="status" class="select">
+                    <option value="new" {{ old('status') == 'new' ? 'selected' : '' }}>New</option>
+                    <option value="quotation" {{ old('status') == 'quotation' ? 'selected' : '' }}>Quotation</option>
+                    <option value="invoice" {{ old('status') == 'invoice' ? 'selected' : '' }}>Invoice</option>
                 </select>
             </div>
 
