@@ -31,6 +31,9 @@ class DashboardController extends Controller
         // Revenue Chart Currency
         $monthlyRevenueCurrency = $this->getMonthlyRevenueCurrency($year);
 
+        // Sales by Continent
+        $salesByContinent = $this->getSalesByContinent();
+
         // Order Count and Revenue
         $orderCountRevenue = $this->getOrderCountRevenue($year);
         // Sales Share
@@ -55,6 +58,8 @@ class DashboardController extends Controller
 
             'monthlyRevenue',
             'monthlyRevenueCurrency',
+
+            'salesByContinent',
 
             'orderCountRevenue',
             'salesShare',
@@ -133,6 +138,7 @@ class DashboardController extends Controller
         for ($i = 1; $i <= 12; $i++) {
             $revenue = Order::whereMonth('order_date', $i)
                 ->whereYear('order_date', $year)
+                ->where('status', 'paid')
                 ->sum(DB::raw('grand_total * exchange_rate'));
 
             $monthlyRevenue[] = [
@@ -157,6 +163,7 @@ class DashboardController extends Controller
                 $revenue = Order::whereMonth('order_date', $i)
                     ->whereYear('order_date', $year)
                     ->where('currency', $currency)
+                    ->where('status', 'paid')
                     ->sum(DB::raw('grand_total'));
 
                 $data[] = [
@@ -188,6 +195,36 @@ class DashboardController extends Controller
         return $monthlyRevenueCurrency;
     }
 
+    private function getSalesByContinent()
+    {
+        $defaultContinents = [
+            'undefined' => 0,
+            'asia' => 0,
+            'europe' => 0,
+            'america' => 0,
+            'africa' => 0,
+            'australia' => 0,
+        ];
+
+        $salesByContinent = Order::where('status', 'paid')
+            ->select('continent', DB::raw('count(*) as total_sales'))
+            ->groupBy('continent')
+            ->pluck('total_sales', 'continent')
+            ->toArray();
+
+        $merged = array_merge($defaultContinents, $salesByContinent);
+
+        $totalSales = array_sum($merged);
+
+        // Persentages the array
+        $percentages = [];
+        foreach ($merged as $continent => $count) {
+            $percentages[$continent] = $totalSales > 0 ? round(($count / $totalSales) * 100) : 0;
+        }
+
+        return $percentages;
+    }
+
     private function getOrderCountRevenue($year)
     {
         $orderCountRevenue = [
@@ -200,6 +237,7 @@ class DashboardController extends Controller
         foreach ($currencies as $currency) {
             $orders = Order::whereYear('order_date', $year)
                 ->where('currency', $currency)
+                ->where('status', 'paid')
                 ->selectRaw('SUM(grand_total) as revenue, COUNT(*) as order_count')
                 ->first();
 
@@ -218,6 +256,7 @@ class DashboardController extends Controller
 
         $result = Order::whereYear('order_date', $year)
             ->selectRaw('currency, count(orders.id) as total_orders')
+            ->where('status', 'paid')
             ->groupBy('currency')
             ->get();
 
@@ -240,7 +279,9 @@ class DashboardController extends Controller
     private function getTopCustomersOrder()
     {
         $topCustomers = Customer::select('customers.name')
-            ->withCount('orders')
+            ->withCount(['orders as orders_count' => function ($query) {
+                $query->where('status', 'paid');
+            }])
             ->orderByDesc('orders_count')
             ->take(10)
             ->get();
@@ -254,7 +295,10 @@ class DashboardController extends Controller
     private function getTopCustomersRevenue()
     {
         $topCustomers = Customer::select('customers.name')
-            ->leftJoin('orders', 'orders.customer_id', '=', 'customers.id')
+            ->leftJoin('orders', function ($join) {
+                $join->on('orders.customer_id', '=', 'customers.id')
+                    ->where('orders.status', '=', 'paid');
+            })
             ->selectRaw('COALESCE(SUM(orders.grand_total * orders.exchange_rate), 0) AS total_orders')
             ->groupBy('customers.id', 'customers.name')
             ->orderByDesc('total_orders')

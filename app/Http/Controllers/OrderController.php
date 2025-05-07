@@ -70,11 +70,14 @@ class OrderController extends Controller
             'order_number' => 'nullable|string|max:255',
             'object' => 'nullable|string|max:255',
             'cargo' => 'nullable|string|max:255',
+            'continent' => 'nullable|in:undefined,asia,europe,america,africa,australia',
             'status' => 'required|in:new,quotation,invoice,paid,cancelled',
-            'currency' => 'required|string|max:10',
+            'currency' => 'required|in:idr,usd,eur',
             'exchange_rate' => 'integer',
             'vat' => 'nullable|numeric|max:100',
         ]);
+
+        // dd($data);
 
         try {
             if ($data['customer_id'] == null) {
@@ -142,6 +145,7 @@ class OrderController extends Controller
             'order_number' => 'nullable|string|max:255',
             'object' => 'nullable|string|max:255',
             'cargo' => 'nullable|string|max:255',
+            'continent' => 'nullable|in:undefined,asia,europe,america,africa,australia',
             'status' => 'required|in:new,quotation,invoice,paid,cancelled',
             'currency' => 'nullable|string|max:10',
             'exchange_rate' => 'required|integer',

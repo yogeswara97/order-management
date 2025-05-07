@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('order_number')->nullable();
             $table->string('object')->nullable();
             $table->string('cargo')->nullable();
+            $table->enum('continent', ['undefined','asia', 'europe', 'america', 'africa', 'australia'])->default('undefined');
             $table->enum('status', ['new', 'quotation', 'invoice', 'paid', 'cancelled'])->default('new');
-            $table->string('currency',3);
+            $table->string('currency', 3);
             $table->integer('exchange_rate')->default('1')->nullable();
             $table->integer('total')->default('0')->nullable();
             $table->integer('vat')->default('0')->nullable();

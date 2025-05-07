@@ -19,6 +19,7 @@ class Order extends Model
         'order_number',
         'object',
         'cargo',
+        'continent',
         'status',
         'currency',
         'exchange_rate',

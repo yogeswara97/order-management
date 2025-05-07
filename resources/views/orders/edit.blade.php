@@ -76,7 +76,7 @@
         {{-- ORDER --}}
         <h2 class="text-gray-900 font-semibold text-xl py-4">Order Data</h2>
         <hr class="mb-4">
-        <div class="grid gap-6 mb-6 md:grid-cols-4">
+        <div class="grid gap-6 mb-6 md:grid-cols-5">
 
             <div>
                 <label for="order_date" class="block mb-2 text-sm font-medium text-gray-900">Order Date</label>
@@ -107,14 +107,24 @@
                     class="input"
                     placeholder="object">
             </div>
-        </div>
-        <div class="grid gap-6 mb-6 md:grid-cols-5">
 
             <div>
                 <label for="cargo" class="block mb-2 text-sm font-medium text-gray-900">Cargo</label>
                 <input type="text" id="cargo" name="cargo" value="{{ $order->cargo }}"
                     class="input"
                     placeholder="Cargo">
+            </div>
+
+            <div>
+                <label for="continent" class="block mb-2 text-sm font-medium text-gray-900">Continent</label>
+                <select id="continent" name="continent" class="select">
+                    <option value="undefined" {{ $order->continent == 'undefined' ? 'selected' : '' }}>Select Continent</option>
+                    <option value="asia" {{ $order->continent == 'asia' ? 'selected' : '' }}>Asia</option>
+                    <option value="europe" {{ $order->continent == 'europe' ? 'selected' : '' }}>Europe</option>
+                    <option value="america" {{ $order->continent == 'america' ? 'selected' : '' }}>America</option>
+                    <option value="africa" {{ $order->continent == 'africa' ? 'selected' : '' }}>Africa</option>
+                    <option value="australia" {{ $order->continent == 'australia' ? 'selected' : '' }}>Australia</option>
+                </select>
             </div>
 
             <div>
@@ -141,8 +151,7 @@
             </div>
 
             <div>
-                <label for="exchange" class="block mb-2 text-sm font-medium text-gray-900">Exchange rate to
-                    IDR</label>
+                <label for="exchange" class="block mb-2 text-sm font-medium text-gray-900">Rate (IDR)</label>
                 <input type="number" id="exchange" name="exchange_rate" value="{{ $order->exchange_rate }}"
                     class="input"
                     placeholder="12000">

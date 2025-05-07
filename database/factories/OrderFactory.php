@@ -16,6 +16,13 @@ class OrderFactory extends Factory
      */
     public function definition(): array
     {
+        $statusOptions = array_merge(
+            array_fill(0, 10, 'new'),
+            array_fill(0, 15, 'quotation'),
+            array_fill(0, 25, 'invoice'),
+            array_fill(0, 40, 'paid'),
+            array_fill(0, 10, 'cancelled'),
+        );
         return [
             // 'customer_id' => 1,
             'customer_id' => $this->faker->numberBetween(1, 10),
@@ -25,7 +32,8 @@ class OrderFactory extends Factory
             'order_number' => $this->faker->unique()->randomNumber(6),
             'object' => $this->faker->word(),
             'cargo' => $this->faker->word(),
-            'status' => $this->faker->randomElement(['new', 'quotation', 'invoice']),
+            'continent' => $this->faker->randomElement(['asia', 'europe', 'america', 'africa', 'australia']),
+            'status' => $this->faker->randomElement($statusOptions),
             'currency' => $this->faker->randomElement(['usd', 'idr', 'eur']),
             'total' => $this->faker->randomFloat(2, 10, 1000),
             'vat' => $this->faker->randomFloat(2, 0, 99),

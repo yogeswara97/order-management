@@ -90,10 +90,16 @@
                     <label class="block mb-2 text-sm font-medium text-gray-900">Object</label>
                     <input type="text" readonly class="input" value="{{ $order->object }}">
                 </div>
-
+            </div>
+            <div class="grid gap-6 mb-6 md:grid-cols-5">
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-900">Cargo</label>
                     <input type="text" readonly class="input" value="{{ $order->cargo }}">
+                </div>
+
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Continent</label>
+                    <input type="text" readonly class="input capitalize" value="{{ $order->continent }}">
                 </div>
 
                 <div>
@@ -107,7 +113,7 @@
                 </div>
 
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900">Exchange rate to IDR</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Rate (IDR)</label>
                     <input type="text" readonly id="exchange" class="input"
                         value="{{ format_currency($order->exchange_rate, 'IDR', 'id_ID') }}">
                 </div>

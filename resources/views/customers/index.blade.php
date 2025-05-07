@@ -34,8 +34,8 @@
                     </td>
                     <td class="px-6 py-4">
                         <span
-                            class=" flex items-center justify-center p-2  rounded-md
-                                @if ($customer->status == 'Member') bg-green-400 text-green-950 bg-opacity-60 @endif
+                            class=" flex items-center justify-center p-2  rounded-md capitalize
+                                @if ($customer->status == 'member') bg-green-400 text-green-950 bg-opacity-60 @endif
                             ">
                             {{ $customer->status }}
                         </span>

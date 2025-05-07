@@ -1,4 +1,5 @@
 <x-layout>
+
     <x-slot:title>{{ $title }}</x-slot:title>
 
     {{-- METRICS --}}
@@ -55,13 +56,12 @@
                                 <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     {{ format_currency($order->grand_total, $order->currency, 'id_ID') }}
                                 </td>
-                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap flex items-center gap-2">
-                                    <a href="{{ route('order.show', $order->id) }}"
-                                        class="button-mini-show">
+                                <td
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap flex items-center gap-2">
+                                    <a href="{{ route('order.show', $order->id) }}" class="button-mini-show">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('order.edit', $order->id) }}"
-                                        class="button-mini-edit">
+                                    <a href="{{ route('order.edit', $order->id) }}" class="button-mini-edit">
                                         <i class="fas fa-pencil"></i>
                                     </a>
                                 </td>
@@ -88,11 +88,13 @@
                     </div>
                 </div>
                 <div class="flex items-center justify-center gap-4">
-                    <a href="{{ route('index', ['year' => $year - 1]) }}" class="button-mini-show flex items-center gap-2">
+                    <a href="{{ route('index', ['year' => $year - 1]) }}"
+                        class="button-mini-show flex items-center gap-2">
                         <i class="fa-solid fa-arrow-left"></i>
                     </a>
                     <span class="text-gray-900 font-bold text-lg">{{ $year }}</span>
-                    <a href="{{ route('index', ['year' => $year + 1]) }}" class="button-mini-show flex items-center gap-2">
+                    <a href="{{ route('index', ['year' => $year + 1]) }}"
+                        class="button-mini-show flex items-center gap-2">
                         <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
@@ -110,20 +112,26 @@
     {{-- REVENUE CHART BY currency --}}
     <section>
         <div class="mb-4">
-            <x-charts.revenue-chart-currency :year="$year" :monthlyRevenueCurrency="$monthlyRevenueCurrency"/>
+            <x-charts.revenue-chart-currency :year="$year" :monthlyRevenueCurrency="$monthlyRevenueCurrency" />
         </div>
+    </section>
+
+    {{-- SALES BY CONTINENT --}}
+    {{-- {{ dd($salesByContinent) }} --}}
+    <section>
+        <x-dashboard.sales-by-continent :salesByContinent="$salesByContinent"/>
     </section>
 
     {{-- Order Count and Revenue and Sales Share --}}
     <section>
         <div class="gap-4 mb-4 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
             {{-- Order Count and Revenue (2-up on md) --}}
-            <x-charts.order-revenue :year="$year" :orderCountRevenue="$orderCountRevenue"/>
-            <x-charts.order-count :year="$year" :orderCountRevenue="$orderCountRevenue"/>
+            <x-charts.order-revenue :year="$year" :orderCountRevenue="$orderCountRevenue" />
+            <x-charts.order-count :year="$year" :orderCountRevenue="$orderCountRevenue" />
 
             {{-- Sales Share by Currency (full width below on md) --}}
             <div class="lg:col-span-2 xl:col-span-1">
-                <x-charts.sales-share :year="$year" :salesShare="$salesShare"/>
+                <x-charts.sales-share :year="$year" :salesShare="$salesShare" />
             </div>
         </div>
     </section>
@@ -132,15 +140,18 @@
     <section>
         <div class="gap-4 mb-4 flex flex-col xl:flex-row">
             {{-- TOP CUTSOMERS BY REVENUE AND ORDER --}}
-            <x-charts.top-customer-revenue :topCustomersChart="$topCustomersRevenue"/>
+            <x-charts.top-customer-revenue :topCustomersChart="$topCustomersRevenue" />
             {{-- TOP CUTSOMERS BY REVENUE AND ORDER --}}
-            <x-charts.top-customer-order :topCustomersOrder="$topCustomersOrder"/>
+            <x-charts.top-customer-order :topCustomersOrder="$topCustomersOrder" />
         </div>
     </section>
 
 
 
+
     @push('scripts')
-        <script src="{{ asset('js/apexcart.js') }}"></script>
-    @endpush
+    <script src="{{ asset('js/apexcart.js') }}"></script>
+
+@endpush
+
 </x-layout>

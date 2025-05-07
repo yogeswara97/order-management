@@ -71,7 +71,7 @@
         {{-- ORDER --}}
         <h2 class="text-gray-900 font-semibold text-xl py-4">Order Data</h2>
         <hr class="mb-4">
-        <div class="grid gap-6 mb-6 md:grid-cols-4">
+        <div class="grid gap-6 mb-6 md:grid-cols-5">
             <div>
                 <label for="order_date" class="block mb-2 text-sm font-medium text-gray-900">Order Date</label>
                 <input type="date" id="order_date" name="order_date"
@@ -104,14 +104,25 @@
                     value="{{ old('object') }}"
                     placeholder="object">
             </div>
-        </div>
-        <div class="grid gap-6 mb-6 md:grid-cols-5">
             <div>
                 <label for="cargo" class="block mb-2 text-sm font-medium text-gray-900">Cargo</label>
                 <input type="text" id="cargo" name="cargo"
                     class="input"
                     value="{{ old('cargo') }}"
                     placeholder="Cargo">
+            </div>
+        </div>
+        <div class="grid gap-6 mb-6 md:grid-cols-5">
+            <div>
+                <label for="continent" class="block mb-2 text-sm font-medium text-gray-900">Continent</label>
+                <select id="continent" name="continent" class="select">
+                    <option value="undefined" {{ old('continent') ? 'undefined' : 'selected' }}>Select Continent</option>
+                    <option value="asia" {{ old('continent') == 'asia' ? 'selected' : '' }}>Asia</option>
+                    <option value="europe" {{ old('continent') == 'europe' ? 'selected' : '' }}>Europe</option>
+                    <option value="america" {{ old('continent') == 'america' ? 'selected' : '' }}>America</option>
+                    <option value="africa" {{ old('continent') == 'africa' ? 'selected' : '' }}>Africa</option>
+                    <option value="australia" {{ old('continent') == 'australia' ? 'selected' : '' }}>Australia</option>
+                </select>
             </div>
 
             <div>
@@ -136,8 +147,7 @@
             </div>
 
             <div>
-                <label for="exchange" class="block mb-2 text-sm font-medium text-gray-900">Exchange rate to
-                    IDR</label>
+                <label for="exchange" class="block mb-2 text-sm font-medium text-gray-900">Rate (IDR)</label>
                 <input type="text" id="exchange" name="exchange_rate"
                     class="input"
                     placeholder="12000">
