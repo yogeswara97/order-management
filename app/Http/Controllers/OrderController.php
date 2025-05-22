@@ -33,6 +33,8 @@ class OrderController extends Controller
         $customersName = Customer::pluck('name')->toArray();
         $title = "Order";
 
+        // dd($orders);
+
         return view('orders.index', compact('orders', 'perPage', 'title', 'customersName','statusCounts'));
     }
 

@@ -26,12 +26,12 @@
         <div class="w-full md:w-1/3 space-y-4">
             @php
                 $continents = [
-                    ['name' => 'Asia', 'value' => $salesByContinent['asia'], 'color' => '#f87171'],
-                    ['name' => 'Europe', 'value' => $salesByContinent['europe'], 'color' => '#60a5fa'],
-                    ['name' => 'America', 'value' => $salesByContinent['america'], 'color' => '#34d399'],
-                    ['name' => 'Australia', 'value' => $salesByContinent['australia'], 'color' => '#c084fc'],
-                    ['name' => 'Africa', 'value' => $salesByContinent['africa'], 'color' => '#facc15'],
-                    ['name' => 'Undefined', 'value' => $salesByContinent['undefined'], 'color' => '#9ca3af '],
+                    ['name' => 'Asia', 'value' => $salesByContinent['asia'], 'color' => '#dc2626'], // red-600
+                    ['name' => 'Europe', 'value' => $salesByContinent['europe'], 'color' => '#2563eb'], // blue-600
+                    ['name' => 'America', 'value' => $salesByContinent['america'], 'color' => '#059669'], // green-600
+                    ['name' => 'Australia', 'value' => $salesByContinent['australia'], 'color' => '#9333ea'], // purple-600
+                    ['name' => 'Africa', 'value' => $salesByContinent['africa'], 'color' => '#ca8a04'], // yellow-600
+                    ['name' => 'Undefined', 'value' => $salesByContinent['undefined'], 'color' => '#4b5563'], // gray-600
                 ];
             @endphp
             @foreach ($continents as $continent)
@@ -62,38 +62,39 @@
                     latLng: [35.8617, 104.1954],
                     name: "Asia",
                     style: {
-                        fill: "#f87171"
+                        fill: "#dc2626" // red-600
                     }
-                }, // red-400
+                },
                 {
                     latLng: [54.5260, 15.2551],
                     name: "Europe",
                     style: {
-                        fill: "#60a5fa"
+                        fill: "#2563eb" // blue-600
                     }
-                }, // blue-400
+                },
                 {
                     latLng: [37.0902, -95.7129],
                     name: "America",
                     style: {
-                        fill: "#34d399"
+                        fill: "#059669" // green-600
                     }
-                }, // green-400
+                },
                 {
                     latLng: [-25.2744, 133.7751],
                     name: "Australia",
                     style: {
-                        fill: "#c084fc"
+                        fill: "#9333ea" // purple-600
                     }
-                }, // purple-400
+                },
                 {
                     latLng: [1.6508, 17.6791],
                     name: "Africa",
                     style: {
-                        fill: "#facc15"
+                        fill: "#ca8a04" // yellow-600
                     }
-                } // yellow-400
+                }
             ];
+
 
             $('#sales-by-locations').vectorMap({
                 map: 'world_mill_en',

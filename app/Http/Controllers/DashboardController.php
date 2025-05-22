@@ -43,6 +43,8 @@ class DashboardController extends Controller
         $topCustomersOrder = $this->getTopCustomersOrder();
         $topCustomersRevenue = $this->getTopCustomersRevenue();
 
+        // dd($salesByContinent);
+
 
         return view('index', compact(
             'title',
