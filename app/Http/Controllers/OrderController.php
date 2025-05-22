@@ -19,7 +19,14 @@ class OrderController extends Controller
         $perPage = 50;
 
         $orders = Order::with('customer')
-            ->orderByRaw("FIELD(status, 'new', 'quotation', 'invoice','paid','cancelled')")
+            ->orderByRaw("CASE status
+                    WHEN 'new' THEN 1
+                    WHEN 'quotation' THEN 2
+                    WHEN 'invoice' THEN 3
+                    WHEN 'paid' THEN 4
+                    WHEN 'cancelled' THEN 5
+                    ELSE 6
+                END")
             ->orderByDesc('created_at')
             ->filter($request->only(['start', 'end', 'search', 'status']))
             ->paginate($perPage)
@@ -35,7 +42,7 @@ class OrderController extends Controller
 
         // dd($orders);
 
-        return view('orders.index', compact('orders', 'perPage', 'title', 'customersName','statusCounts'));
+        return view('orders.index', compact('orders', 'perPage', 'title', 'customersName', 'statusCounts'));
     }
 
 
@@ -197,7 +204,9 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($itemId) {}
+    public function destroy($itemId)
+    {
+    }
 
     public function exportPdf($id)
     {
