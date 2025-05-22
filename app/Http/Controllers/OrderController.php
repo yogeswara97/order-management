@@ -217,7 +217,7 @@ class OrderController extends Controller
         foreach ($order->orderItems as $item) {
             $orderItemsImage[] = public_path('storage/' . $item->image);
         }
-        dd($orderItemsImage);
+        // dd($orderItemsImage);
 
         $data = [
             'title' => $order->status . ' - ' . $order->order_date . ' - ' . $customer_name,
