@@ -10,10 +10,29 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('loginForm');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
 
-// Route::middleware(['auth'])->group(function () {
+Route::get('/fake-login', function (Request $request) {
+    $user = User::first(); // atau find(id) sesuai kebutuhan
+
+    $userData = [
+        'id'    => $user->id,
+        'name'  => $user->name,
+        'email' => $user->email,
+        'role'  => $user->role,
+    ];
+
+    $request->session()->put('user', $userData);
+
+    return redirect('/')->with('success', 'Fake login berhasil!');
+});
+
+Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::get('/', [DashboardController::class, 'index'])->name('index');
@@ -33,7 +52,7 @@ Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
     Route::resource('admin', AdminController::class);
 
     Route::get('/chatbot', [ChatbotController::class, 'index'])->name('chatbot.index');
-// });
+});
 
 Route::fallback(function () {
     return redirect()->route('index');
