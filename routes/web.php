@@ -13,11 +13,21 @@ use App\Http\Controllers\OrderController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('loginForm');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
 
 Route::get('/fake-login', function (Request $request) {
+    $user = User::firstOrCreate(
+        ['email' => 'yoges@gmail.com'],
+        [
+            'name' => 'Yoges',
+            'password' => Hash::make('password'),
+            'role' => 'super.admin',
+        ]
+    );
+
     $user = User::first(); // atau find(id) sesuai kebutuhan
 
     $userData = [
