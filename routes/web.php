@@ -32,5 +32,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('admin', AdminController::class);
 
-    Route::get('/chatbot',[ChatbotController::class,'index'])->name('chatbot.index');
+    Route::get('/chatbot', [ChatbotController::class, 'index'])->name('chatbot.index');
+});
+
+Route::fallback(function () {
+    return redirect()->route('index');
 });
