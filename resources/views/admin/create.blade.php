@@ -27,7 +27,7 @@
             </div>
 
             <div>
-                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email Name <span
+                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email<span
                         class="text-red-500">*</span></label>
                 <input type="email" id="email" name="email"
                     class="input"
@@ -35,7 +35,7 @@
             </div>
 
             <div>
-                <label for="role" class="block mb-2 text-sm font-medium text-gray-900">Role Name <span
+                <label for="role" class="block mb-2 text-sm font-medium text-gray-900">Role<span
                         class="text-red-500">*</span></label>
                 <select id="role" name="role"
                     class="select">

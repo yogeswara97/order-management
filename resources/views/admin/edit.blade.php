@@ -4,7 +4,7 @@
     <x-alret />
 
     {{-- HEADER --}}
-    <x-header title="Create Admin" :breadcrumbs="[
+    <x-header title="Edit Admin" :breadcrumbs="[
         ['label' => 'Home', 'url' => route('index')],
         ['label' => 'Admin', 'url' => route('admin.index')],
         ['label' => 'Edit Admin', 'url' => route('admin.edit', $admin->id)],
@@ -27,14 +27,14 @@
             </div>
 
             <div>
-                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email Name <span
+                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email<span
                         class="text-red-500">*</span></label>
                 <input type="email" id="email" name="email" class="input"
                     value="{{ old('email', $admin->email) }}" placeholder="example@example.com">
             </div>
 
             <div>
-                <label for="role" class="block mb-2 text-sm font-medium text-gray-900">Role Name <span
+                <label for="role" class="block mb-2 text-sm font-medium text-gray-900">Role<span
                         class="text-red-500">*</span></label>
                 <select id="role" name="role" class="select">
                     <option value="admin" {{ old('role', $admin->role) == 'admin' ? 'selected' : '' }}>Admin</option>
