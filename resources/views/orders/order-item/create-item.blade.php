@@ -29,7 +29,7 @@
                     </svg>
                     <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to
                             upload</span> or drag and drop</p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 2048kbCreate Customer)</p>
                 </div>
                 <img id="preview" src="" alt="Image Preview" class="hidden max-w-full max-h-full object-cover my-2" />
                 <input id="dropzone-file" type="file" class="hidden" name="image" accept="image/*" value="" />

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('quill/quill.css') }}">
     <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/x-icon">
-
+    <script src="//unpkg.com/alpinejs" defer></script>
 
     <style>
         /* Menghilangkan panah di input type number untuk browser berbasis Webkit (Chrome, Safari, dll) */

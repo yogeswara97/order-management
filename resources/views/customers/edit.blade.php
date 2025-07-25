@@ -4,7 +4,7 @@
     <x-alret />
 
     {{-- HEADER --}}
-    <x-header title="Create Customer" :breadcrumbs="[
+    <x-header title="Edit Customer" :breadcrumbs="[
         ['label' => 'Home', 'url' => route('index')],
         ['label' => 'Customers', 'url' => route('customer.index')],
         ['label' => 'Edit Customers', 'url' => route('customer.edit', $customer->id)],

@@ -1,13 +1,16 @@
 <nav class="bg-gray-50 border border-gray-200 fixed top-0 w-full h-16 z-20">
     <div class=" flex flex-wrap items-center justify-end mx-auto sm:px-10 py-4">
         <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative text-black">
-            <button type="button"
-                class="flex items-center text-sm rounded-full"
-                id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
-                data-dropdown-placement="bottom">
+            <a href="{{ route('guide') }}"
+                class="mr-4 hidden sm:inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <i class="fa fa-book mr-2"></i> Guide
+            </a>
+
+            <button type="button" class="flex items-center text-sm rounded-full" id="user-menu-button"
+                aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
                 <span class="h-9 w-9 rounded-full overflow-hidden">
-                    <img class="w-full h-full object-cover rounded-full bg-gray-200 p-2" src="{{ asset('img/user2.png') }}"
-                        alt="user photo">
+                    <img class="w-full h-full object-cover rounded-full bg-gray-200 p-2"
+                        src="{{ asset('img/user2.png') }}" alt="user photo">
                 </span>
                 <span class="ml-4 flex flex-col items-start">
                     <div class="block text-sm font-medium text-black ">

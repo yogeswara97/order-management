@@ -6,6 +6,7 @@ use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GuideController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
@@ -31,6 +32,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('customer', CustomerController::class);
 
     Route::resource('admin', AdminController::class);
+
+    Route::get('/guide', [GuideController::class, 'index'])->name('guide');
 
     Route::get('/chatbot', [ChatbotController::class, 'index'])->name('chatbot.index');
 });
