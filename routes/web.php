@@ -11,7 +11,13 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('loginForm');
+Route::get('/login', function () {
+    if (auth()->check()) {
+        return redirect()->route('index');
+    }
+    return app(LoginController::class)->showLoginForm();
+})->name('loginForm');
+
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
 
 Route::middleware(['auth'])->group(function () {

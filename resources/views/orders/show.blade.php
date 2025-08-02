@@ -9,7 +9,8 @@
         ['label' => 'Orders', 'url' => route('order.index')],
         ['label' => 'Detail Orders', 'url' => route('order.show', $order->id)],
     ]">
-        {{-- #{{ $order->status == 'quotation' ? 'Quo' : ($order->status == 'invoice' ? 'Inv' : ($order->status == 'new' ? 'New' : 'New')) }}
+        {{-- #{{ $order->status == 'quotation' ? 'Quo' : ($order->status == 'invoice' ? 'Inv' : ($order->status == 'new'
+        ? 'New' : 'New')) }}
         -{{ $order->id }}
         -{{ \Carbon\Carbon::parse($order->order_date)->format('Y') }} --}}
         {{ $order->order_number }}
@@ -28,10 +29,10 @@
                             Edit
                         </a>
                         @if ($order->status !== 'new')
-                            <a href="{{ route('exportPdf', $order->id) }}" class="button-delete">
-                                <i class="fas fa-file-pdf"></i>
-                                Export to PDF
-                            </a>
+                        <a href="{{ route('exportPdf', $order->id) }}" class="button-delete">
+                            <i class="fas fa-file-pdf"></i>
+                            Export to PDF
+                        </a>
                         @endif
                     </div>
                 </div>
@@ -143,7 +144,7 @@
 
             </div>
 
-            {{-- Terms and conditions  --}}
+            {{-- Terms and conditions --}}
             <h2 class="text-gray-900 font-semibold text-xl py-4">Terms and Conditions</h2>
             <hr class="mb-4">
             <div class="mb-6">
@@ -199,50 +200,48 @@
 
         <x-table :headers="['No', 'Image', 'Item Name', 'Qty', 'Unit', 'Unit Price', 'Total Price', 'Action']">
             @foreach ($order->orderItems as $items)
-                <tr class="bg-white border-b border-gray-200 hover:bg-gray-50 text-gray-800 font-semibold">
-                    <td class="px-6 py-4">
-                        {{ $loop->iteration }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <img src="{{ url('storage/' . $items->image) }}" alt=" " title=""
-                            style="max-width: 200px; max-height: 200px;;" />
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ $items->item_name }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ $items->quantity }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ $items->unit }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ format_currency($items->unit_price, $order->currency, 'id_ID') }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ format_currency($items->total_price, $order->currency, 'id_ID') }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex flex-1 gap-2">
-                            <a href="{{ route('editItem', ['orderId' => $order->id, 'itemId' => $items->id]) }}"
-                                class="button-mini-edit">
-                                <i class="fas fa-pencil"></i>
-                            </a>
-                            <form
-                                action="{{ route('destroyItem', ['orderId' => $order->id, 'itemId' => $items->id]) }}"
-                                method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit"
-                                    onclick="return confirm('Are you sure you want to delete this item?')"
-                                    class="button-mini-delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </td>
+            <tr class="bg-white border-b border-gray-200 hover:bg-gray-50 text-gray-800 font-semibold">
+                <td class="px-6 py-4">
+                    {{ $loop->iteration }}
+                </td>
+                <td class="px-6 py-4">
+                    <img src="{{ asset('storage/' . $items->image) }}" alt=" " title=""
+                        style="max-width: 200px; max-height: 200px;" />
+                </td>
+                <td class="px-6 py-4">
+                    {{ $items->item_name }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ $items->quantity }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ $items->unit }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ format_currency($items->unit_price, $order->currency, 'id_ID') }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ format_currency($items->total_price, $order->currency, 'id_ID') }}
+                </td>
+                <td class="px-6 py-4">
+                    <div class="flex flex-1 gap-2">
+                        <a href="{{ route('editItem', ['orderId' => $order->id, 'itemId' => $items->id]) }}"
+                            class="button-mini-edit">
+                            <i class="fas fa-pencil"></i>
+                        </a>
+                        <form action="{{ route('destroyItem', ['orderId' => $order->id, 'itemId' => $items->id]) }}"
+                            method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" onclick="return confirm('Are you sure you want to delete this item?')"
+                                class="button-mini-delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </td>
 
-                </tr>
+            </tr>
             @endforeach
         </x-table>
     </div>
@@ -250,14 +249,14 @@
 
 
     @push('scripts')
-        <script src="{{ asset('quill/quill.js') }}"></script>
-        <script>
-            const quill = new Quill('#editor', {
+    <script src="{{ asset('quill/quill.js') }}"></script>
+    <script>
+        const quill = new Quill('#editor', {
                 theme: 'bubble'
             });
 
             quill.root.style.color = '#111';
-        </script>
+    </script>
     @endpush
 
 </x-layout>
